@@ -70,7 +70,7 @@ produces data, all of its subscribers will receive the same data. This behavior 
 
 Lets see an example to clarify this.
 
-1. Publishing through Subject
+**Publishing through Subject**
 
 {% highlight java %}
 PublishSubject<Double> subject = PublishSubject.create();
@@ -84,7 +84,7 @@ subject.onNext(Math.random());
 // B: 0.8495447073368834
 {% endhighlight %}
 
-2. Publishing through Observable
+**Publishing through Observable**
 
 {% highlight java %}
 Observable<Double> observable = Observable.create(subscriber -> subscriber.onNext(Math.random()));
@@ -196,4 +196,4 @@ Our late subscriber now missed the first value, which fell off the buffer of siz
 Other than these there are other subjects as well like **BehaviorSubject**,
 **AsyncSubject** you can dig in [here](https://github.com/ReactiveX/RxJava/wiki/Subject) more deeper
 
-In the next post we will be looking in to the LifeCycle management of Reactive Subscriptions and how to handle errors emitted through Observables so, stay tuned
+In the next post we will be looking in to the [LifeCycle management of Reactive Subscriptions](https://murtaza-bagwala.github.io/Lifecycle-Management/) and how to handle errors emitted through Observables so, stay tuned
