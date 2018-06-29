@@ -5,7 +5,7 @@ title: Diving into RxJava
 
 I am back with the another post which aims to introduce a beginner reactive programmer to the complete power of the Java implementation of reactive programming.
 
-No experience with either reactive or functional programming is needed to follow the basics of RxJava, only familiarity with the basics of Java is required.
+Basic knowledge of functional programming is needed like (lamdbdas, lazy evaluation) to follow the basics of RxJava, other than this only familiarity with the basics of Java is required.
 
 ## Fundamental types
 

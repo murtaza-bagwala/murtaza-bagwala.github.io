@@ -191,5 +191,5 @@ disposable2.dispose();
 
 In the above example both the observers subscribed to the same observable, while defining observable we set the disposable through `Disposables.fromAction` which returns `Disposable`. so, when any observer gets disposed all the resources mentioned in `Disposables.fromAction` will get released.
 
-In the next post we will be looking in to the `Observable` and its types.
+In the next post we will be looking in to the `Observable` and the [strategies]((https://murtaza-bagwala.github.io/Lifecycle-Management/)) to create them.
 
