@@ -4,9 +4,8 @@ module.exports = {
 	url: "https://lumen.netlify.com",
 	pathPrefix: "/",
 	title: "Blog by Murtaza Bagwala",
-	subtitle:
-		"Pellentesque odio nisi, euismod in, pharetra a, ultricies in, diam. Sed arcu.",
-	copyright: "© All rights reserved.",
+	subtitle: "A place where I love to share my opinions and experiences.",
+	copyright: "© All rights reserved 2020.",
 	disqusShortname: "",
 	postsPerPage: 6,
 	googleAnalyticsId: "UA-73379983-2",
@@ -20,15 +19,11 @@ module.exports = {
 			label: "About me",
 			path: "/pages/about"
 		},
-		{
-			label: "Contact me",
-			path: "/pages/contacts"
-		}
 	],
 	author: {
 		name: "Murtaza Bagwala",
 		photo: "/murtaza.jpeg",
-		bio: "Software Craftsman and Functional Programming enthusiast",
+		bio: "Software Craftsman and Functional Programming enthusiast. Exploring GraphQL and React",
 		contacts: {
 			email: "bagwalamurtaza@gmail.com",
 			facebook: "",
