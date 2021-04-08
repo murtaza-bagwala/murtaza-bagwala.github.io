@@ -5,7 +5,7 @@ module.exports = {
 	pathPrefix: "/",
 	title: "Blog by Murtaza Bagwala",
 	subtitle: "A place where I love to share my opinions and experiences.",
-	copyright: "© All rights reserved 2020.",
+	copyright: "© All rights reserved 2021.",
 	disqusShortname: "",
 	postsPerPage: 6,
 	googleAnalyticsId: "UA-73379983-2",
