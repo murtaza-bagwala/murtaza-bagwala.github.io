@@ -1,6 +1,6 @@
 ---
-title: How we improved the Player's rank and Leaderboard calculations in one of our trivia apps
-date: "2022-04-05T18:00:37.121Z"
+title: How we improved the Player's rank and Leaderboard calculations in trivia apps
+date: "2021-04-05T18:00:37.121Z"
 template: "post"
 draft: false
 slug: "algorithms"
