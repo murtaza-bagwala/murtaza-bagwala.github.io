@@ -3,9 +3,9 @@
 module.exports = {
 	url: "https://lumen.netlify.com",
 	pathPrefix: "/",
-	title: "Blog by Murtaza Bagwala",
+	title: "Tech Blog by Murtaza Bagwala",
 	subtitle: "A place where I love to share my opinions and experiences.",
-	copyright: "© All rights reserved 2021.",
+	copyright: "© All rights reserved 2022.",
 	disqusShortname: "",
 	postsPerPage: 6,
 	googleAnalyticsId: "UA-73379983-2",
