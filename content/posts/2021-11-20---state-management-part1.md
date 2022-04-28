@@ -4,7 +4,7 @@ date: "2021-11-20T18:00:37.121Z"
 template: "post"
 draft: false
 slug: "8-ways-to-handle-state-management-part-1"
-category: "State Normalization"
+category: "State Management"
 tags:
 - "react"
 - "redux"

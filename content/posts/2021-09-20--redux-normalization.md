@@ -4,7 +4,7 @@ date: "2021-09-20T18:00:37.121Z"
 template: "post"
 draft: false
 slug: "redux-state-normalization"
-category: "Redux State Normalization"
+category: "State Management"
 tags:
 - "react"
 - "redux"
