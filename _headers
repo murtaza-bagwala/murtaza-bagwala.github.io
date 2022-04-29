@@ -210,6 +210,18 @@
   Link: </component---src-templates-post-template-js-2078a538ecd479eb4c85.js>; rel=preload; as=script
   Link: </page-data/app-data.json>; rel=preload; as=fetch; crossorigin
   Link: </page-data/posts/general-blogs/page-data.json>; rel=preload; as=fetch; crossorigin
+/posts/amazon-personalize
+  Link: </webpack-runtime-bcaa39fce28708816bcb.js>; rel=preload; as=script
+  Link: </styles-9b6f388623a2ec93d35f.js>; rel=preload; as=script
+  Link: </framework-6e11d4e07218876eea4b.js>; rel=preload; as=script
+  Link: </532a2f07-0bdce019e7334bf580d8.js>; rel=preload; as=script
+  Link: </app-0dfd1edc0224713f60bf.js>; rel=preload; as=script
+  Link: </styles-9b6f388623a2ec93d35f.js>; rel=preload; as=script
+  Link: </cd95ea5cbd2c605f26db819f07999610c9ff4310-0415b0ed48b1428b3054.js>; rel=preload; as=script
+  Link: </643651a62fb35a9bb4f20061cb1f214a352d7976-80fc3dca2e05b06d2460.js>; rel=preload; as=script
+  Link: </component---src-templates-post-template-js-2078a538ecd479eb4c85.js>; rel=preload; as=script
+  Link: </page-data/app-data.json>; rel=preload; as=fetch; crossorigin
+  Link: </page-data/posts/amazon-personalize/page-data.json>; rel=preload; as=fetch; crossorigin
 /posts/diving-into-rxjava
   Link: </webpack-runtime-bcaa39fce28708816bcb.js>; rel=preload; as=script
   Link: </styles-9b6f388623a2ec93d35f.js>; rel=preload; as=script
@@ -306,18 +318,6 @@
   Link: </component---src-templates-post-template-js-2078a538ecd479eb4c85.js>; rel=preload; as=script
   Link: </page-data/app-data.json>; rel=preload; as=fetch; crossorigin
   Link: </page-data/posts/rails-7-caching-helper/page-data.json>; rel=preload; as=fetch; crossorigin
-/posts/amazon-personalize
-  Link: </webpack-runtime-bcaa39fce28708816bcb.js>; rel=preload; as=script
-  Link: </styles-9b6f388623a2ec93d35f.js>; rel=preload; as=script
-  Link: </framework-6e11d4e07218876eea4b.js>; rel=preload; as=script
-  Link: </532a2f07-0bdce019e7334bf580d8.js>; rel=preload; as=script
-  Link: </app-0dfd1edc0224713f60bf.js>; rel=preload; as=script
-  Link: </styles-9b6f388623a2ec93d35f.js>; rel=preload; as=script
-  Link: </cd95ea5cbd2c605f26db819f07999610c9ff4310-0415b0ed48b1428b3054.js>; rel=preload; as=script
-  Link: </643651a62fb35a9bb4f20061cb1f214a352d7976-80fc3dca2e05b06d2460.js>; rel=preload; as=script
-  Link: </component---src-templates-post-template-js-2078a538ecd479eb4c85.js>; rel=preload; as=script
-  Link: </page-data/app-data.json>; rel=preload; as=fetch; crossorigin
-  Link: </page-data/posts/amazon-personalize/page-data.json>; rel=preload; as=fetch; crossorigin
 /posts/rails-7-adds-arguments-to-lock-with
   Link: </webpack-runtime-bcaa39fce28708816bcb.js>; rel=preload; as=script
   Link: </styles-9b6f388623a2ec93d35f.js>; rel=preload; as=script
