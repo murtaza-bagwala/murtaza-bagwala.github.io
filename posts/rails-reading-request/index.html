@@ -58,173 +58,79 @@
 
         gtag('config', 'UA-73379983-2', {"send_page_view":false});
       }
-      </script><link rel="sitemap" type="application/xml" href="/sitemap.xml"/><link rel="icon" href="/favicon-32x32.png?v=b56c185831be207d24b494cee04ea08d" type="image/png"/><link rel="manifest" href="/manifest.webmanifest" crossorigin="anonymous"/><meta name="theme-color" content="#F7A046"/><link rel="apple-touch-icon" sizes="48x48" href="/icons/icon-48x48.png?v=b56c185831be207d24b494cee04ea08d"/><link rel="apple-touch-icon" sizes="72x72" href="/icons/icon-72x72.png?v=b56c185831be207d24b494cee04ea08d"/><link rel="apple-touch-icon" sizes="96x96" href="/icons/icon-96x96.png?v=b56c185831be207d24b494cee04ea08d"/><link rel="apple-touch-icon" sizes="144x144" href="/icons/icon-144x144.png?v=b56c185831be207d24b494cee04ea08d"/><link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192x192.png?v=b56c185831be207d24b494cee04ea08d"/><link rel="apple-touch-icon" sizes="256x256" href="/icons/icon-256x256.png?v=b56c185831be207d24b494cee04ea08d"/><link rel="apple-touch-icon" sizes="384x384" href="/icons/icon-384x384.png?v=b56c185831be207d24b494cee04ea08d"/><link rel="apple-touch-icon" sizes="512x512" href="/icons/icon-512x512.png?v=b56c185831be207d24b494cee04ea08d"/><title data-react-helmet="true">Rails for Multi database defines reading_request? in resolver - Tech Blog by Murtaza Bagwala</title><meta data-react-helmet="true" name="description" content="Rails moves reading_request? method from the DatabaseSelector to the DatabaseSelector::Resolver class so that we can override the method in custom Resolver."/><meta data-react-helmet="true" property="og:site_name" content="Rails for Multi database defines reading_request? in resolver - Tech Blog by Murtaza Bagwala"/><meta data-react-helmet="true" property="og:image" content="https://lumen.netlify.com/murtaza.jpeg"/><meta data-react-helmet="true" name="twitter:card" content="summary"/><meta data-react-helmet="true" name="twitter:title" content="Rails for Multi database defines reading_request? in resolver - Tech Blog by Murtaza Bagwala"/><meta data-react-helmet="true" name="twitter:description" content="Rails moves reading_request? method from the DatabaseSelector to the DatabaseSelector::Resolver class so that we can override the method in custom Resolver."/><meta data-react-helmet="true" name="twitter:image" content="https://lumen.netlify.com/murtaza.jpeg"/><link as="script" rel="preload" href="/webpack-runtime-d9f2838020e9be0f3ccc.js"/><link as="script" rel="preload" href="/framework-1b174197fe6013c4312d.js"/><link as="script" rel="preload" href="/532a2f07-3a76190e4ba81461ce95.js"/><link as="script" rel="preload" href="/app-af190c9315252d00d4ac.js"/><link as="script" rel="preload" href="/styles-0ec71dd62c66cb95665c.js"/><link as="script" rel="preload" href="/cd95ea5cbd2c605f26db819f07999610c9ff4310-60b1b7c4689557375f68.js"/><link as="script" rel="preload" href="/643651a62fb35a9bb4f20061cb1f214a352d7976-69497aa94f3820458336.js"/><link as="script" rel="preload" href="/component---src-templates-post-template-js-7c00aa10c128efdc3705.js"/><link as="fetch" rel="preload" href="/page-data/posts/rails-reading-request/page-data.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/page-data/sq/d/251939775.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/page-data/sq/d/401334301.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/page-data/sq/d/984292147.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/page-data/app-data.json" crossorigin="anonymous"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" id="gatsby-focus-wrapper"><div class="Layout-module--layout--3Pyz6"><div><a class="Post-module--post__home-button--16Kl0" href="/">All Articles</a><div><div class="Content-module--content--3p512"><h1 class="Content-module--content__title--2BDW9">Rails for Multi database defines reading_request? in resolver</h1><div class="Content-module--content__body--2TrQ-"><p><a href="https://blog.saeloun.com/2020/02/14/rails-6-multiple-database-support.html" target="_blank" rel="nofollow noopener noreferrer">Rails 6</a>
-had added the support for multiple database connections
-using which we can configure the separate databases for reads and writes. </p>
-<p>For example, we have two databases <code class="language-text">write_database</code> and <code class="language-text">read_database</code>.</p>
-<div class="gatsby-highlight" data-language="text"><pre class="language-text"><code class="language-text">  /config/database.yml
+      </script><link rel="sitemap" type="application/xml" href="/sitemap.xml"/><link rel="icon" href="/favicon-32x32.png?v=b56c185831be207d24b494cee04ea08d" type="image/png"/><link rel="manifest" href="/manifest.webmanifest" crossorigin="anonymous"/><meta name="theme-color" content="#F7A046"/><link rel="apple-touch-icon" sizes="48x48" href="/icons/icon-48x48.png?v=b56c185831be207d24b494cee04ea08d"/><link rel="apple-touch-icon" sizes="72x72" href="/icons/icon-72x72.png?v=b56c185831be207d24b494cee04ea08d"/><link rel="apple-touch-icon" sizes="96x96" href="/icons/icon-96x96.png?v=b56c185831be207d24b494cee04ea08d"/><link rel="apple-touch-icon" sizes="144x144" href="/icons/icon-144x144.png?v=b56c185831be207d24b494cee04ea08d"/><link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192x192.png?v=b56c185831be207d24b494cee04ea08d"/><link rel="apple-touch-icon" sizes="256x256" href="/icons/icon-256x256.png?v=b56c185831be207d24b494cee04ea08d"/><link rel="apple-touch-icon" sizes="384x384" href="/icons/icon-384x384.png?v=b56c185831be207d24b494cee04ea08d"/><link rel="apple-touch-icon" sizes="512x512" href="/icons/icon-512x512.png?v=b56c185831be207d24b494cee04ea08d"/><title data-react-helmet="true">Rails allows specifying the maximum number of records that will be destroyed in a single background job. - Tech Blog by Murtaza Bagwala</title><meta data-react-helmet="true" name="description" content="Rails adds an active record configuration to limit the maximum number of dependent records destroyed in a single background job."/><meta data-react-helmet="true" property="og:site_name" content="Rails allows specifying the maximum number of records that will be destroyed in a single background job. - Tech Blog by Murtaza Bagwala"/><meta data-react-helmet="true" property="og:image" content="https://lumen.netlify.com/murtaza.jpeg"/><meta data-react-helmet="true" name="twitter:card" content="summary"/><meta data-react-helmet="true" name="twitter:title" content="Rails allows specifying the maximum number of records that will be destroyed in a single background job. - Tech Blog by Murtaza Bagwala"/><meta data-react-helmet="true" name="twitter:description" content="Rails adds an active record configuration to limit the maximum number of dependent records destroyed in a single background job."/><meta data-react-helmet="true" name="twitter:image" content="https://lumen.netlify.com/murtaza.jpeg"/><link as="script" rel="preload" href="/webpack-runtime-d9f2838020e9be0f3ccc.js"/><link as="script" rel="preload" href="/framework-1b174197fe6013c4312d.js"/><link as="script" rel="preload" href="/532a2f07-3a76190e4ba81461ce95.js"/><link as="script" rel="preload" href="/app-af190c9315252d00d4ac.js"/><link as="script" rel="preload" href="/styles-0ec71dd62c66cb95665c.js"/><link as="script" rel="preload" href="/cd95ea5cbd2c605f26db819f07999610c9ff4310-60b1b7c4689557375f68.js"/><link as="script" rel="preload" href="/643651a62fb35a9bb4f20061cb1f214a352d7976-69497aa94f3820458336.js"/><link as="script" rel="preload" href="/component---src-templates-post-template-js-7c00aa10c128efdc3705.js"/><link as="fetch" rel="preload" href="/page-data/posts/rails-reading-request/page-data.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/page-data/sq/d/251939775.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/page-data/sq/d/401334301.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/page-data/sq/d/984292147.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/page-data/app-data.json" crossorigin="anonymous"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" id="gatsby-focus-wrapper"><div class="Layout-module--layout--3Pyz6"><div><a class="Post-module--post__home-button--16Kl0" href="/">All Articles</a><div><div class="Content-module--content--3p512"><h1 class="Content-module--content__title--2BDW9">Rails allows specifying the maximum number of records that will be destroyed in a single background job.</h1><div class="Content-module--content__body--2TrQ-"><p><a href="https://blog.saeloun.com/2020/11/18/rails-6.1-adds-support-for-destroying-dependent-associations-in-the-background" target="_blank" rel="nofollow noopener noreferrer">Rails 6</a>
+had added the <code class="language-text">:destroy_async</code> option to delete the associated records in a background job whenever the <code class="language-text">foreign_key</code> constraint would be disabled.</p>
+<p>But what if the associated records are too large?
+In this case,
+by default, the single background job will delete all of them
+and that can be time-consuming.
+To handle this,
+and make it fast,
+Rails now allows adding the active record configuration to specify the maximum number of records
+that will be destroyed in a single background job
+and enqueue additional jobs
+when the number of records exceeds that limit.</p>
+<p>Example:</p>
+<p>Suppose we have a <code class="language-text">Product</code> model
+and a <code class="language-text">Review</code> model.</p>
+<div class="gatsby-highlight" data-language="text"><pre class="language-text"><code class="language-text">  # product.rb
+  class Product &lt; ApplicationRecord 
+  
+    has_many :reviews, dependent: :destroy_async
 
-  default: &amp;default
-    adapter: postgresql
-    encoding: unicode
-    host: &lt;%= ENV['PG_HOST'] || 'localhost' %>
-    pool: 5
-    username: &lt;%= ENV['PG_USER'] || 'postgres' %>
-    password: &lt;%= ENV['PG_PASSWORD'] || 'postgres' %>
-
-  development:
-    write_database:
-      &lt;&lt;: *default
-      database: &lt;%= "write_database" %>
-
-    read_database:
-      &lt;&lt;: *default
-      database: &lt;%= "read_database" %></code></pre></div>
-<p>Now to use the above-defined databases,
-we need to set up the Active Record model.</p>
-<div class="gatsby-highlight" data-language="text"><pre class="language-text"><code class="language-text">  app/models/application_record.rb
-
-  class ApplicationRecord &lt; ActiveRecord::Base
-    self.abstract_class = true
-    connects_to database: { writing: :write_database, reading: :read_database }
   end
 
-  app/models/product.rb
+  # review.rb
+  class Review &lt; ApplicationRecord
 
-  class Product &lt; ApplicationRecord
-    validates :name, presence: true
-    validates :description, presence: true
-  end</code></pre></div>
-<p>And to enable the automatic switching between the databases
-based on the HTTP Verb we need to add the below configuration. </p>
-<div class="gatsby-highlight" data-language="text"><pre class="language-text"><code class="language-text">  config/application.rb
-
-  module MultiDBApp
-    class Application &lt; Rails::Application
-      config.active_record.database_selector = { delay: 2.seconds }
-      config.active_record.database_resolver = ActiveRecord::Middleware::DatabaseSelector::Resolver
-      config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
-    end
-  end</code></pre></div>
-<p>Using the above configuration
-Rails looks for the <code class="language-text">reading_request?</code> method
-defined in the middleware <code class="language-text">ActiveRecord::Middleware::Middleware::DatabaseSelector</code>,
-its default implementation is true for GET and HEAD requests,
-which means for POST, PUT, DELETE, or PATCH request
-the application will automatically write to the <code class="language-text">write_database</code>
-and for read, it will use <code class="language-text">read_database</code>.</p>
-<p><strong>Note:- According to the
-<a href="https://guides.rubyonrails.org/active_record_multiple_databases.html#activating-automatic-role-switching" target="_blank" rel="nofollow noopener noreferrer">docs</a>
-we are supposed to add the above configuration in
-initializers(/config/initializers/multi_db.rb)
-but this is broken in Rails latest release so as suggested here in the
-<a href="https://github.com/rails/rails/issues/45162#issuecomment-1135072689" target="_blank" rel="nofollow noopener noreferrer">Rails issue</a>,
-we need to add the config in <code class="language-text">application.rb</code></strong></p>
-<h4 id="before" style="position:relative;"><a href="#before" aria-label="before permalink" class="anchor before"><svg aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Before</h4>
-<p>Let us call a <code class="language-text">create_product</code>(POST) API to create a Product.</p>
-<div class="gatsby-highlight" data-language="text"><pre class="language-text"><code class="language-text">  POST:- http://localhost:3000/products
-
-  Body:- { name: "Detergent", description: "A mixture of surfactants with cleansing properties" }
-
-  Response:- 
-  
-  {
-    "id": 1,
-    "name": "Detergent",
-    "description": "A mixture of surfactants with cleansing properties",
-    "created_at": "2022-06-14T06:25:25.877Z",
-    "updated_at": "2022-06-14T06:25:25.877Z"
-  }</code></pre></div>
-<p>So, as expected, the product is created successfully in <code class="language-text">write_database</code>.</p>
-<p>If we call a <code class="language-text">get_product</code>(GET) API,
-it says product not found because,
-the GET request will be redirected to <code class="language-text">read_database</code>,
-and that does not have a Product that we created recently.</p>
-<div class="gatsby-highlight" data-language="text"><pre class="language-text"><code class="language-text">  GET:- http://localhost:3000/products/1
-
-  Response:-
-  
-  {
-    "error": "product with id 1 not found"
-  }</code></pre></div>
-<p>So, this is working as expected. Now suppose,
-if we call a GraphQL API to read the particular product.</p>
-<div class="gatsby-highlight" data-language="text"><pre class="language-text"><code class="language-text">  GraphQL API:-
-  
-  {
-    product(id: 1) {
-      id
-      name
-      description
-    }
-  }
-
-  Response:-
-
-  {
-    "data": {
-      "product": {
-        "id": "1",
-        "title": "Detergent",
-        "description": "A mixture of surfactants with cleansing properties"
-      }
-    }
-  }</code></pre></div>
-<p>Whoa!!! We get the Product details back,
-ideally, it should respond with a <code class="language-text">not_found</code> error
-because it is a read request,
-but GraphQL API uses the POST HTTP method and
-according to the default implementation POST requests get redirected to the <code class="language-text">write_database</code>.</p>
-<h4 id="after" style="position:relative;"><a href="#after" aria-label="after permalink" class="anchor before"><svg aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>After</h4>
-<p>To fix this,
-Rails has moved <code class="language-text">reading_request?</code>
-method from the <code class="language-text">ActiveRecord::Middleware::Middleware::DatabaseSelector</code>
-to the <code class="language-text">ActiveRecord::Middleware::DatabaseSelector::Resolver</code> class,
-so that we can override and create custom Resolver.</p>
-<p>Let us create a custom resolver
-and override the <code class="language-text">reading_request?</code> method to add the validations for a GraphQL API.</p>
-<div class="gatsby-highlight" data-language="text"><pre class="language-text"><code class="language-text">  class CustomResolver &lt; ActiveRecord::Middleware::DatabaseSelector::Resolver
-    def reading_request?(request)
-      graphql_read = request.post? &amp;&amp; request.path == "/graphql" &amp;&amp; !request.params[:query]&amp;.include?("mutation")
-      graphql_read || super
-    end
-  end
-
-  module MultiDBApp
-    class Application &lt; Rails::Application
-      config.load_defaults 7.1
+    belongs_to :product
     
-      config.active_record.database_selector = { delay: 2.seconds }
-      config.active_record.database_resolver = CustomResolver
-      config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
-    end
   end</code></pre></div>
-<p>So, our custom <code class="language-text">reading_request?</code> checks if the request is POST,
-type is GraphQL and params doesn’t have <code class="language-text">mutation</code>
-then consider it as a read request and redirect it to the <code class="language-text">read_database</code>.</p>
-<p>Now, if we call a GraphQL API again to read the particular product.</p>
-<div class="gatsby-highlight" data-language="text"><pre class="language-text"><code class="language-text">  GraphQL API:-
+<p>Notice that we have added the <code class="language-text">:destroy_async</code> option to delete <code class="language-text">review</code> records in a background job.</p>
+<h3 id="before" style="position:relative;"><a href="#before" aria-label="before permalink" class="anchor before"><svg aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Before</h3>
+<div class="gatsby-highlight" data-language="text"><pre class="language-text"><code class="language-text">  => Product.find(1).destroy
+
+  =>  Performing ActiveRecord::DestroyAssociationAsyncJob (Job ID: 880513a7-f6c4-4a35-8d33-6d69a737031e) from Async(default) enqueued at 2022-06-03T11:15:13Z with arguments: {:owner_model_name=>"Product", :owner_id=>1, :association_class=>"Review", :association_ids=>[1, 2, 3], :association_primary_key_column=>:id, :ensuring_owner_was_method=>nil}
+  Product Load (1.6ms)  SELECT "products".* FROM "products" WHERE "products"."id" = $1 LIMIT $2  [["id", 1], ["LIMIT", 1]]
+  Review Load (1.7ms)  SELECT "reviews".* FROM "reviews" WHERE "reviews"."id" IN ($1, $2, $3) ORDER BY "reviews"."id" ASC LIMIT $4  [["id", 1], ["id", 2], ["id", 3], ["LIMIT", 1000]]
+  TRANSACTION (1.2ms)  BEGIN
+  Review Destroy (1.4ms)  DELETE FROM "reviews" WHERE "reviews"."id" = $1  [["id", 1]]
+  TRANSACTION (1.7ms)  COMMIT
+  TRANSACTION (1.1ms)  BEGIN
+  Review Destroy (1.3ms)  DELETE FROM "reviews" WHERE "reviews"."id" = $1  [["id", 2]]
+  TRANSACTION (1.6ms)  COMMIT
+  TRANSACTION (1.1ms)  BEGIN
+  Review Destroy (1.2ms)  DELETE FROM "reviews" WHERE "reviews"."id" = $1  [["id", 3]]
+  TRANSACTION (1.6ms)  COMMIT
+  Performed ActiveRecord::DestroyAssociationAsyncJob (Job ID: 880513a7-f6c4-4a35-8d33-6d69a737031e) from Async(default) in 51.36ms</code></pre></div>
+<p>As it can be seen all the reviews get deleted in a single async job with ID <code class="language-text">880513a7-f6c4-4a35-8d33-6d69a737031e</code>.</p>
+<h3 id="after" style="position:relative;"><a href="#after" aria-label="after permalink" class="anchor before"><svg aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>After</h3>
+<p>Now, we can add the configuration to specify the maximum number of records that will be destroyed in a single background job.</p>
+<div class="gatsby-highlight" data-language="text"><pre class="language-text"><code class="language-text">  /config/environments/development.rb
   
-  {
-    product(id: 1) {
-      id
-      name
-      description
-    }
-  }
+  config.active_record.destroy_association_async_batch_size = 10</code></pre></div>
+<p>Now, if we try to delete a Product with 50 reviews,
+Rails will enqueue 5 <code class="language-text">DestroyAssociationAsyncJobs</code> to delete all of them.</p>
+<div class="gatsby-highlight" data-language="text"><pre class="language-text"><code class="language-text">  => Product.find(2).reviews.count
+  => 50
+  => Product.find(2).destroy
 
-  Response:-
+  => Enqueued ActiveRecord::DestroyAssociationAsyncJob (Job ID: c141dbf1-124a-4659-89cd-15e89ddec6fe) to Async(default) with arguments:     {:owner_model_name=>"Product", :owner_id=>2, :association_class=>"Review", :association_ids=>[4, 5, 6, 7, 8, 9, 10, 11, 12, 13], :association_primary_key_column=>:id, :ensuring_owner_was_method=>nil}
+  Enqueued ActiveRecord::DestroyAssociationAsyncJob (Job ID: 9e3d67ef-aebd-4e56-b6d1-d6bc520d8b74) to Async(default) with arguments: {:owner_model_name=>"Product", :owner_id=>2, :association_class=>"Review", :association_ids=>[14, 15, 16, 17, 18, 19, 20, 21, 22, 23], :association_primary_key_column=>:id, :ensuring_owner_was_method=>nil}
+  Enqueued ActiveRecord::DestroyAssociationAsyncJob (Job ID: a5910f83-806d-467e-a9cf-0e40701d91aa) to Async(default) with arguments: {:owner_model_name=>"Product", :owner_id=>2, :association_class=>"Review", :association_ids=>[24, 25, 26, 27, 28, 29, 30, 31, 32, 33], :association_primary_key_column=>:id, :ensuring_owner_was_method=>nil}
+  Enqueued ActiveRecord::DestroyAssociationAsyncJob (Job ID: 1588b961-b531-4ed7-acaa-8cbc71a98103) to Async(default) with arguments: {:owner_model_name=>"Product", :owner_id=>2, :association_class=>"Review", :association_ids=>[34, 35, 36, 37, 38, 39, 40, 41, 42, 43], :association_primary_key_column=>:id, :ensuring_owner_was_method=>nil}
+  Enqueued ActiveRecord::DestroyAssociationAsyncJob (Job ID: b42848f7-e958-4b47-8670-e0cde6fc0cd9) to Async(default) with arguments: {:owner_model_name=>"Product", :owner_id=>2, :association_class=>"Review", :association_ids=>[44, 45, 46, 47, 48, 49, 50, 51, 52, 53], :association_primary_key_column=>:id, :ensuring_owner_was_method=>nil}
 
-  {
-    "errors": [
-      {
-        "message": "Couldn't find Product with 'id'=1"
-      }
-    ]
-  }</code></pre></div>
-<p>It responds with a <code class="language-text">not_found</code> message,
-which is expected because <code class="language-text">read_database</code> doesn’t have a Product record.</p>
+  Performed ActiveRecord::DestroyAssociationAsyncJob (Job ID: 1588b961-b531-4ed7-acaa-8cbc71a98103) from Async(default) in 119.36ms
+  TRANSACTION (2.0ms)  COMMIT
+  Performed ActiveRecord::DestroyAssociationAsyncJob (Job ID: b42848f7-e958-4b47-8670-e0cde6fc0cd9) from Async(default) in 120.38ms
+  TRANSACTION (2.3ms)  COMMIT
+  Performed ActiveRecord::DestroyAssociationAsyncJob (Job ID: a5910f83-806d-467e-a9cf-0e40701d91aa) from Async(default) in 122.97ms
+  TRANSACTION (1.6ms)  COMMIT
+  Performed ActiveRecord::DestroyAssociationAsyncJob (Job ID: c141dbf1-124a-4659-89cd-15e89ddec6fe) from Async(default) in 123.75ms
+  TRANSACTION (1.3ms)  COMMIT
+  Performed ActiveRecord::DestroyAssociationAsyncJob (Job ID: 9e3d67ef-aebd-4e56-b6d1-d6bc520d8b74) from Async(default) in 166.56ms</code></pre></div>
 <p><strong>Note: The enhancement is yet to be released in the official Rails version</strong></p>
 <p>Check out
-<a href="https://github.com/rails/rails/pull/44944" target="_blank" rel="nofollow noopener noreferrer">the PR</a>
-for more details.</p></div></div></div><div class="Post-module--post__footer--3WzWU"><div><p class="Meta-module--meta__date--29eD7">Published <!-- -->15 Jun 2022</p></div><div class="Tags-module--tags--1L_ct"><ul class="Tags-module--tags__list--91FqN"><li class="Tags-module--tags__list-item--1M30P"><a class="Tags-module--tags__list-item-link--3SL_8" href="/tag/rails/">rails</a></li><li class="Tags-module--tags__list-item--1M30P"><a class="Tags-module--tags__list-item-link--3SL_8" href="/tag/rails-7/">rails-7</a></li></ul></div><div class="Author-module--author--2Yefr"><p>Software Craftsman and Functional Programming enthusiast. Exploring GraphQL and React<a class="Author-module--author__bio-twitter--n-O9n" href="https://www.twitter.com/undefined" rel="noopener noreferrer" target="_blank"><strong>Murtaza Bagwala</strong> on Twitter</a></p></div></div><div class="Post-module--post__comments--25y6I"></div></div></div></div><div id="gatsby-announcer" style="position:absolute;top:0;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0" aria-live="assertive" aria-atomic="true"></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/posts/rails-reading-request";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"polyfill":["/polyfill-51869ef85ddae52b32a4.js"],"app":["/app-af190c9315252d00d4ac.js"],"component---cache-caches-gatsby-plugin-offline-app-shell-js":["/component---cache-caches-gatsby-plugin-offline-app-shell-js-2f9004dcb1f826313e67.js"],"component---src-templates-categories-list-template-js":["/component---src-templates-categories-list-template-js-896678bda0284b1eb3a5.js"],"component---src-templates-category-template-js":["/component---src-templates-category-template-js-bf2b3528e874f3cbbd56.js"],"component---src-templates-index-template-js":["/component---src-templates-index-template-js-bcc99e126ce760810e81.js"],"component---src-templates-not-found-template-js":["/component---src-templates-not-found-template-js-9ae8c9f4b8256d5be2f8.js"],"component---src-templates-page-template-js":["/component---src-templates-page-template-js-3edd3fe5e80e0314aeb3.js"],"component---src-templates-post-template-js":["/component---src-templates-post-template-js-7c00aa10c128efdc3705.js"],"component---src-templates-tag-template-js":["/component---src-templates-tag-template-js-ffc7c37bfd8dfeba5616.js"],"component---src-templates-tags-list-template-js":["/component---src-templates-tags-list-template-js-abb6898e5566bb492129.js"]};/*]]>*/</script><script src="/polyfill-51869ef85ddae52b32a4.js" nomodule=""></script><script src="/component---src-templates-post-template-js-7c00aa10c128efdc3705.js" async=""></script><script src="/643651a62fb35a9bb4f20061cb1f214a352d7976-69497aa94f3820458336.js" async=""></script><script src="/cd95ea5cbd2c605f26db819f07999610c9ff4310-60b1b7c4689557375f68.js" async=""></script><script src="/styles-0ec71dd62c66cb95665c.js" async=""></script><script src="/app-af190c9315252d00d4ac.js" async=""></script><script src="/532a2f07-3a76190e4ba81461ce95.js" async=""></script><script src="/framework-1b174197fe6013c4312d.js" async=""></script><script src="/webpack-runtime-d9f2838020e9be0f3ccc.js" async=""></script></body></html>
+<a href="https://github.com/rails/rails/pull/44617" target="_blank" rel="nofollow noopener noreferrer">the PR</a>
+for more details.</p></div></div></div><div class="Post-module--post__footer--3WzWU"><div><p class="Meta-module--meta__date--29eD7">Published <!-- -->14 Jun 2022</p></div><div class="Tags-module--tags--1L_ct"><ul class="Tags-module--tags__list--91FqN"><li class="Tags-module--tags__list-item--1M30P"><a class="Tags-module--tags__list-item-link--3SL_8" href="/tag/rails/">rails</a></li><li class="Tags-module--tags__list-item--1M30P"><a class="Tags-module--tags__list-item-link--3SL_8" href="/tag/rails-7/">rails-7</a></li></ul></div><div class="Author-module--author--2Yefr"><p>Software Craftsman and Functional Programming enthusiast. Exploring GraphQL and React<a class="Author-module--author__bio-twitter--n-O9n" href="https://www.twitter.com/undefined" rel="noopener noreferrer" target="_blank"><strong>Murtaza Bagwala</strong> on Twitter</a></p></div></div><div class="Post-module--post__comments--25y6I"></div></div></div></div><div id="gatsby-announcer" style="position:absolute;top:0;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0" aria-live="assertive" aria-atomic="true"></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/posts/rails-reading-request";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"polyfill":["/polyfill-51869ef85ddae52b32a4.js"],"app":["/app-af190c9315252d00d4ac.js"],"component---cache-caches-gatsby-plugin-offline-app-shell-js":["/component---cache-caches-gatsby-plugin-offline-app-shell-js-2f9004dcb1f826313e67.js"],"component---src-templates-categories-list-template-js":["/component---src-templates-categories-list-template-js-896678bda0284b1eb3a5.js"],"component---src-templates-category-template-js":["/component---src-templates-category-template-js-bf2b3528e874f3cbbd56.js"],"component---src-templates-index-template-js":["/component---src-templates-index-template-js-bcc99e126ce760810e81.js"],"component---src-templates-not-found-template-js":["/component---src-templates-not-found-template-js-9ae8c9f4b8256d5be2f8.js"],"component---src-templates-page-template-js":["/component---src-templates-page-template-js-3edd3fe5e80e0314aeb3.js"],"component---src-templates-post-template-js":["/component---src-templates-post-template-js-7c00aa10c128efdc3705.js"],"component---src-templates-tag-template-js":["/component---src-templates-tag-template-js-ffc7c37bfd8dfeba5616.js"],"component---src-templates-tags-list-template-js":["/component---src-templates-tags-list-template-js-abb6898e5566bb492129.js"]};/*]]>*/</script><script src="/polyfill-51869ef85ddae52b32a4.js" nomodule=""></script><script src="/component---src-templates-post-template-js-7c00aa10c128efdc3705.js" async=""></script><script src="/643651a62fb35a9bb4f20061cb1f214a352d7976-69497aa94f3820458336.js" async=""></script><script src="/cd95ea5cbd2c605f26db819f07999610c9ff4310-60b1b7c4689557375f68.js" async=""></script><script src="/styles-0ec71dd62c66cb95665c.js" async=""></script><script src="/app-af190c9315252d00d4ac.js" async=""></script><script src="/532a2f07-3a76190e4ba81461ce95.js" async=""></script><script src="/framework-1b174197fe6013c4312d.js" async=""></script><script src="/webpack-runtime-d9f2838020e9be0f3ccc.js" async=""></script></body></html>

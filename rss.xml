@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Tech Blog by Murtaza Bagwala]]></title><description><![CDATA[A place where I love to share my opinions and experiences.]]></description><link>https://lumen.netlify.com</link><generator>GatsbyJS</generator><lastBuildDate>Sun, 18 Sep 2022 06:58:16 GMT</lastBuildDate><item><title><![CDATA[How to set up a CI/CD workflow for Expo React Native application using Github Actions.]]></title><description><![CDATA[In this blog, we will see how to set up a CI/CD workflow using Github Actions for the Expo React Native application.]]></description><link>https://lumen.netlify.com/posts/rails-beginless-inclusion</link><guid isPermaLink="false">https://lumen.netlify.com/posts/rails-beginless-inclusion</guid><pubDate>Mon, 12 Sep 2022 18:00:37 GMT</pubDate><content:encoded>&lt;p&gt;&lt;a href=&quot;https://zuehlke.github.io/machines-code-people/articles/ci-cd-done-right.html&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;CI/CD&lt;/a&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Tech Blog by Murtaza Bagwala]]></title><description><![CDATA[A place where I love to share my opinions and experiences.]]></description><link>https://lumen.netlify.com</link><generator>GatsbyJS</generator><lastBuildDate>Thu, 06 Oct 2022 14:48:28 GMT</lastBuildDate><item><title><![CDATA[How to set up a CI/CD workflow for Expo React Native application using Github Actions.]]></title><description><![CDATA[In this blog, we will see how to set up a CI/CD workflow using Github Actions for the Expo React Native application.]]></description><link>https://lumen.netlify.com/posts/expo-react-native</link><guid isPermaLink="false">https://lumen.netlify.com/posts/expo-react-native</guid><pubDate>Mon, 12 Sep 2022 18:00:37 GMT</pubDate><content:encoded>&lt;p&gt;&lt;a href=&quot;https://zuehlke.github.io/machines-code-people/articles/ci-cd-done-right.html&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;CI/CD&lt;/a&gt;
 is one of the most important practices of &lt;a href=&quot;http://www.extremeprogramming.org/when.html&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;XP&lt;/a&gt;.
 Having set this up since the beginning can help in identify
 and fix issues earlier and faster time to market.
@@ -17,10 +17,8 @@ we need to create a &lt;code class=&quot;language-text&quot;&gt;ci.yml&lt;/code&
 &lt;li&gt;Add the name of the workflow
 and the action on which we need to trigger the workflow.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;{% highlight yml %}
-name: CI
-on: push
-{% endhighlight %}&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;name: CI
+on: push&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;ul&gt;
 &lt;li&gt;As Workflows are composed of Jobs
 we need to add a Job with the name &lt;code class=&quot;language-text&quot;&gt;lint-and-test&lt;/code&gt;
@@ -28,51 +26,50 @@ as we will be linting the code and running the test cases.
 Also, we need to specify the type of machine
 that will process a job in our workflow.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;{% highlight yml %}
-name: CI
-on: push&lt;/p&gt;
-&lt;p&gt;jobs:
-lint-and-test:
-runs-on: ubuntu-latest
-{% endhighlight %}&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;name: CI
+on: push
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;ul&gt;
 &lt;li&gt;As Job is composed of a series of steps,
 we need to add steps to cache and install the node modules,
 and finally run the lint and test cases.
 So, this is what our final &lt;code class=&quot;language-text&quot;&gt;ci.yml&lt;/code&gt; file will look like.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;{% highlight yml %}&lt;/p&gt;
-&lt;p&gt;name: CI
-on: [push]&lt;/p&gt;
-&lt;p&gt;jobs:
-lint-and-test:
-runs-on: ubuntu-latest&lt;/p&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;# Steps represent a sequence of tasks that will be executed as part of the job
-steps:
-  # Checks out your repository under $GITHUB_WORKSPACE, so your job can access it
-  - uses: actions/checkout@v2
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;name: CI
+on: [push]
 
-  - name: Find yarn cache location
-    id: yarn-cache
-    run: echo &quot;::set-output name=dir::$(yarn cache dir)&quot;
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
 
-  - name: JS package cache
-    uses: actions/cache@v1
-    with:
-      path: $(( steps.yarn-cache.outputs.dir ))
-      key: $(( runner.os ))-yarn-$(( hashFiles(&apos;**/yarn.lock&apos;) ))
-      restore-keys: |
-        $(( runner.os ))-yarn-
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
 
-  - name: Install Node Modules
-    run: yarn install
+      - name: Find yarn cache location
+        id: yarn-cache
+        run: echo &quot;::set-output name=dir::$(yarn cache dir)&quot;
 
-  - name: Run Lint
-    run: yarn lint
+      - name: JS package cache
+        uses: actions/cache@v1
+        with:
+          path: $(( steps.yarn-cache.outputs.dir ))
+          key: $(( runner.os ))-yarn-$(( hashFiles(&apos;**/yarn.lock&apos;) ))
+          restore-keys: |
+            $(( runner.os ))-yarn-
 
-  - name: Run tests
-    run: yarn test  &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;{% endhighlight %}&lt;/p&gt;
+      - name: Install Node Modules
+        run: yarn install
+
+      - name: Run Lint
+        run: yarn lint
+
+      - name: Run tests
+        run: yarn test  &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;Once we add this file and push the code, Github Actions will run the workflow and we can see the results on Github Actions Tab.&lt;/p&gt;
 &lt;h4 id=&quot;continuos-deployment&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#continuos-deployment&quot; aria-label=&quot;continuos deployment permalink&quot; class=&quot;anchor before&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; focusable=&quot;false&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Continuos Deployment&lt;/h4&gt;
 &lt;p&gt;To start with Continuos Deployment we need to first create an &lt;code class=&quot;language-text&quot;&gt;EXPO_TOKEN&lt;/code&gt;
@@ -98,38 +95,34 @@ It also specifies the type of packaging we need to use,
 and the &lt;code class=&quot;language-text&quot;&gt;distribution&lt;/code&gt; channel.  &lt;/p&gt;
 &lt;p&gt;In our case, &lt;code class=&quot;language-text&quot;&gt;credentialsSource&lt;/code&gt; is set to remote
 which means Expo will automatically create the credentials to sign the app.&lt;/p&gt;
-&lt;p&gt;{% highlight json %}
-{
-“cli”: {
-“version”: ”&gt;= 0.52.0”
-},
-“build”: {
-“preview”: {
-“distribution”: “internal”,
-“android”: {
-“buildType”: “apk”
-},
-“credentialsSource”: “remote”
-},
-“production”: {}
-},
-“submit”: {
-“production”: {}
-}
-}&lt;/p&gt;
-&lt;p&gt;{% endhighlight %}&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;{
+  &quot;cli&quot;: {
+    &quot;version&quot;: &quot;&gt;= 0.52.0&quot;
+  },
+  &quot;build&quot;: {
+    &quot;preview&quot;: {
+      &quot;distribution&quot;: &quot;internal&quot;,
+      &quot;android&quot;: {
+        &quot;buildType&quot;: &quot;apk&quot;
+      },
+      &quot;credentialsSource&quot;: &quot;remote&quot;
+    },
+    &quot;production&quot;: {}
+  },
+  &quot;submit&quot;: {
+    &quot;production&quot;: {}
+  }
+}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;Now we are ready to create a GitHub Actions workflow to create a build.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Create a &lt;code class=&quot;language-text&quot;&gt;cd.yml&lt;/code&gt; file inside the &lt;code class=&quot;language-text&quot;&gt;.github/workflows&lt;/code&gt; folder at the root of the project.&lt;/li&gt;
 &lt;li&gt;Add the name of the workflow and action along with the branch name on which we need to trigger the workflow.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;{% highlight yml %}
-name: build
-on:
-push:
-branches:
-- develop
-{% endhighlight %}&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;name: build
+on: 
+ push:
+  branches:
+    - develop&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;ul&gt;
 &lt;li&gt;Add the jobs &lt;code class=&quot;language-text&quot;&gt;build&lt;/code&gt; with &lt;code class=&quot;language-text&quot;&gt;ubuntu-latest&lt;/code&gt; as a runner machine.&lt;/li&gt;
 &lt;li&gt;Add a step to fetch &lt;code class=&quot;language-text&quot;&gt;EXPO_TOKEN&lt;/code&gt; from the project’s settings.&lt;/li&gt;
@@ -139,61 +132,61 @@ branches:
 &lt;li&gt;Finally, add a step to create a build.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Here is what our final &lt;code class=&quot;language-text&quot;&gt;build.yml&lt;/code&gt; looks like:- &lt;/p&gt;
-&lt;p&gt;{% highlight yml %}&lt;/p&gt;
-&lt;p&gt;name: build
-on:
-push:
-branches:
-- develop&lt;/p&gt;
-&lt;p&gt;jobs:
-build:
-name: EAS build
-runs-on: ubuntu-latest
-steps:
-- name: Check for EXPO&lt;em&gt;TOKEN
-run: |
-if [ -z ”$(( secrets.EXPO&lt;/em&gt;TOKEN ))” ]; then
-echo “You must provide an EXPO_TOKEN secret linked to this project’s Expo account in this repo’s secrets. Learn more: &lt;a href=&quot;https://docs.expo.dev/eas-update/github-actions&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;https://docs.expo.dev/eas-update/github-actions&lt;/a&gt;”
-exit 1
-fi&lt;/p&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;  - name: &quot;Set ENV&quot;
-    run: echo &quot;$(BASE_URL)&quot;     
-    env:
-      BASE_URL: https://exampleapp.com    
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;name: build
+on: 
+ push:
+  branches:
+    - develop
 
-  - name: Checkout repository
-    uses: actions/checkout@v2
+jobs:
+  build:
+    name: EAS build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check for EXPO_TOKEN
+        run: |
+          if [ -z &quot;$(( secrets.EXPO_TOKEN ))&quot; ]; then
+            echo &quot;You must provide an EXPO_TOKEN secret linked to this project&apos;s Expo account in this repo&apos;s secrets. Learn more: https://docs.expo.dev/eas-update/github-actions&quot;
+            exit 1
+          fi
 
-  - name: Setup Node
-    uses: actions/setup-node@v2
-    with:
-      node-version: 16.x
-      cache: yarn
+      - name: &quot;Set ENV&quot;
+        run: echo &quot;$(BASE_URL)&quot;     
+        env:
+          BASE_URL: https://exampleapp.com    
 
-  - name: Setup Expo
-    uses: expo/expo-github-action@v7
-    with:
-      expo-version: latest
-      eas-version: latest
-      token: $(( secrets.EXPO_TOKEN ))
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-  - name: Find yarn cache
-    id: yarn-cache-path
-    run: echo &quot;::set-output name=dir::$(yarn cache dir)&quot;
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
+          cache: yarn
 
-  - name: Restore cache
-    uses: actions/cache@v2
-    with:
-      path: &quot;$(( steps.yarn-cache-path.outputs.dir ))&quot;
-      key: &quot;$(( runner.os ))-yarn-$(( hashFiles(&apos;**/yarn.lock&apos;) ))&quot;
-      restore-keys: &quot;$(( runner.os ))-yarn-&quot;
+      - name: Setup Expo
+        uses: expo/expo-github-action@v7
+        with:
+          expo-version: latest
+          eas-version: latest
+          token: $(( secrets.EXPO_TOKEN ))
 
-  - name: Install dependencies
-    run: yarn install --immutable
+      - name: Find yarn cache
+        id: yarn-cache-path
+        run: echo &quot;::set-output name=dir::$(yarn cache dir)&quot;
 
-  - name: Publish build
-    run: eas build --platform android --profile preview &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;{% endhighlight %}&lt;/p&gt;
+      - name: Restore cache
+        uses: actions/cache@v2
+        with:
+          path: &quot;$(( steps.yarn-cache-path.outputs.dir ))&quot;
+          key: &quot;$(( runner.os ))-yarn-$(( hashFiles(&apos;**/yarn.lock&apos;) ))&quot;
+          restore-keys: &quot;$(( runner.os ))-yarn-&quot;
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Publish build
+        run: eas build --platform android --profile preview &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;As it can be seen from the &lt;strong&gt;&lt;em&gt;Publish build&lt;/em&gt;&lt;/strong&gt; command
 we are creating an android build using the &lt;code class=&quot;language-text&quot;&gt;preview&lt;/code&gt; profile as mentioned above.&lt;/p&gt;
 &lt;p&gt;Now, once we push this file to develop branch,
@@ -201,7 +194,7 @@ GitHub Actions will run this workflow
 and trigger the build to be created on the Expo platform.
 Once the build is created,
 we can always download it from Expo builds dashboard.&lt;/p&gt;
-&lt;p&gt;{% include post_image.html file=“expo.png” %}&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Rails adds beginless range support to clusivity]]></title><description><![CDATA[Rails now adds support to include the beginless range in active record inclusivity/exclusivity validators.]]></description><link>https://lumen.netlify.com/posts/rails-beginless-inclusion</link><guid isPermaLink="false">https://lumen.netlify.com/posts/rails-beginless-inclusion</guid><pubDate>Thu, 18 Aug 2022 18:00:37 GMT</pubDate><content:encoded>&lt;p&gt;Now that Ruby 2.7 has added the support for
+&lt;p&gt;&lt;img src=&quot;/expo.png&quot; alt=&quot;alt&quot;&gt;&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Rails adds beginless range support to clusivity]]></title><description><![CDATA[Rails now adds support to include the beginless range in active record inclusivity/exclusivity validators.]]></description><link>https://lumen.netlify.com/posts/rails-beginless-inclusion</link><guid isPermaLink="false">https://lumen.netlify.com/posts/rails-beginless-inclusion</guid><pubDate>Thu, 18 Aug 2022 18:00:37 GMT</pubDate><content:encoded>&lt;p&gt;Now that Ruby 2.7 has added the support for
 &lt;a href=&quot;https://blog.saeloun.com/2019/08/19/ruby-2-7-adds-beginless-range.html&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;beginless range&lt;/a&gt;,
 Rails 7 also adds support to include the beginless range in
 ActiveRecord inclusivity/exclusivity validators.&lt;/p&gt;
@@ -209,80 +202,86 @@ ActiveRecord inclusivity/exclusivity validators.&lt;/p&gt;
 where the price needs to be within 5000,
 we’d have to follow this method-&lt;/p&gt;
 &lt;h4 id=&quot;before&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#before&quot; aria-label=&quot;before permalink&quot; class=&quot;anchor before&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; focusable=&quot;false&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Before&lt;/h4&gt;
-&lt;p&gt;{% highlight ruby %}&lt;/p&gt;
-&lt;p&gt;  class Product &amp;#x3C; ApplicationRecord&lt;/p&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;validates_inclusion_of :price, in: 0..5000&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;  end&lt;/p&gt;
-&lt;p&gt;{% endhighlight %}&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;  class Product &amp;lt; ApplicationRecord
+
+    validates_inclusion_of :price, in: 0..5000
+
+  end&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;Also, if we would try adding beginless range,
 then it will throw an error.&lt;/p&gt;
-&lt;p&gt;{% highlight ruby %}&lt;/p&gt;
-&lt;p&gt;  =&gt; Product.create(title: “Detergent”, description: “A mixture of surfactants with cleansing properties”, price: 4000)
-/Users/.rvm/gems/ruby-3.0.2/gems/activemodel-7.0.3/lib/active_model/validations/clusivity.rb:45:in `first’: cannot get the first element of beginless range (RangeError)&lt;/p&gt;
-&lt;p&gt;{% endhighlight %}&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;  =&gt; Product.create(title: &quot;Detergent&quot;, description: &quot;A mixture of surfactants with cleansing properties&quot;, price: 4000)
+  /Users/.rvm/gems/ruby-3.0.2/gems/activemodel-7.0.3/lib/active_model/validations/clusivity.rb:45:in `first&apos;: cannot get the first element of beginless range (RangeError)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;As it can be seen,
 it throws an error saying &lt;code class=&quot;language-text&quot;&gt;cannot get the first element of beginless range&lt;/code&gt;.&lt;/p&gt;
 &lt;h4 id=&quot;after&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#after&quot; aria-label=&quot;after permalink&quot; class=&quot;anchor before&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; focusable=&quot;false&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;After&lt;/h4&gt;
 &lt;p&gt;After Rails 7,
 we can now add the beginless range.&lt;/p&gt;
-&lt;p&gt;{% highlight ruby %}&lt;/p&gt;
-&lt;p&gt;  class Product &amp;#x3C; ApplicationRecord&lt;/p&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;validates_inclusion_of :price, in: ..5000&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;  end&lt;/p&gt;
-&lt;p&gt;{% endhighlight %}&lt;/p&gt;
-&lt;p&gt;{% highlight ruby %}&lt;/p&gt;
-&lt;p&gt;  =&gt; Product.create(title: “Detergent”, description: “A mixture of surfactants with cleansing properties”, price: 4000)
-=&gt; TRANSACTION (7.5ms)  BEGIN
-Product Create (5.0ms)  INSERT INTO “products” (“name”, “description”, “created&lt;em&gt;at”, “updated&lt;/em&gt;at”, “price”) VALUES (&lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-mathml&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo separator=&quot;true&quot;&gt;,&lt;/mo&gt;&lt;/mrow&gt;&lt;annotation encoding=&quot;application/x-tex&quot;&gt;1,&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&quot;katex-html&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.8388800000000001em;vertical-align:-0.19444em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;mpunct&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;2, &lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-mathml&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;3&lt;/mn&gt;&lt;mo separator=&quot;true&quot;&gt;,&lt;/mo&gt;&lt;/mrow&gt;&lt;annotation encoding=&quot;application/x-tex&quot;&gt;3,&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&quot;katex-html&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.8388800000000001em;vertical-align:-0.19444em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;mpunct&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;4, $5) RETURNING “id”  [[“name”, “Detergent”], [“description”, “A mixture of surfactants with cleansing properties”], [“created_at”, “2022-08-10 20:10:06.227125”], [“updated_at”, “2022-08-10 20:10:06.227125”], [“price”, 4000]]
-TRANSACTION (2.5ms)  COMMIT                                                                                      &lt;/p&gt;
-&lt;p&gt;{% endhighlight %}&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;  class Product &amp;lt; ApplicationRecord
+
+    validates_inclusion_of :price, in: ..5000
+
+  end&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;  =&gt; Product.create(title: &quot;Detergent&quot;, description: &quot;A mixture of surfactants with cleansing properties&quot;, price: 4000)
+  =&gt; TRANSACTION (7.5ms)  BEGIN
+  Product Create (5.0ms)  INSERT INTO &quot;products&quot; (&quot;name&quot;, &quot;description&quot;, &quot;created_at&quot;, &quot;updated_at&quot;, &quot;price&quot;) VALUES ($1, $2, $3, $4, $5) RETURNING &quot;id&quot;  [[&quot;name&quot;, &quot;Detergent&quot;], [&quot;description&quot;, &quot;A mixture of surfactants with cleansing properties&quot;], [&quot;created_at&quot;, &quot;2022-08-10 20:10:06.227125&quot;], [&quot;updated_at&quot;, &quot;2022-08-10 20:10:06.227125&quot;], [&quot;price&quot;, 4000]]
+  TRANSACTION (2.5ms)  COMMIT                                                                                      &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;Check out
 &lt;a href=&quot;https://github.com/rails/rails/pull/45123&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;the PR&lt;/a&gt;
 for more details.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Rails avoids queries when performing calculations on contradictory relation]]></title><description><![CDATA[Rails now avoids making a query to the database if the calculation contains a contradictory relation.]]></description><link>https://lumen.netlify.com/posts/rails-contradictoy-relation</link><guid isPermaLink="false">https://lumen.netlify.com/posts/rails-contradictoy-relation</guid><pubDate>Wed, 20 Jul 2022 18:00:37 GMT</pubDate><content:encoded>&lt;p&gt;Previously, relation calculations such as &lt;code class=&quot;language-text&quot;&gt;count&lt;/code&gt; would make a query
 even when passed a contradiction,
 &lt;a href=&quot;https://github.com/jhawthorn/rails/blob/main/activerecord/lib/active_record/relation/where_clause.rb#L99&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;contradiction relation&lt;/a&gt;
 means passing an empty array for eg:-&lt;/p&gt;
-&lt;p&gt;{% highlight ruby %}
-User.where(id: []).count
-{% endhighlight %}&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;  User.where(id: []).count&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;It does not make sense to call a database for such contradictory relations.&lt;/p&gt;
 &lt;h4 id=&quot;before&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#before&quot; aria-label=&quot;before permalink&quot; class=&quot;anchor before&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; focusable=&quot;false&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Before&lt;/h4&gt;
 &lt;p&gt;So, before Rails 7 was introduced,
 the database was called if the relation used for &lt;code class=&quot;language-text&quot;&gt;count&lt;/code&gt;, &lt;code class=&quot;language-text&quot;&gt;sum&lt;/code&gt;, &lt;code class=&quot;language-text&quot;&gt;average&lt;/code&gt;, &lt;code class=&quot;language-text&quot;&gt;minimum&lt;/code&gt;
 and &lt;code class=&quot;language-text&quot;&gt;maximum&lt;/code&gt; would be contradictory.&lt;/p&gt;
-&lt;p&gt;{% highlight ruby %}
-=&gt; Product.where(title: []).count
-Product Count (4.7ms)  SELECT COUNT(*) FROM “products” WHERE 1=0
-=&gt; 0 &lt;/p&gt;
-&lt;p&gt;  =&gt; Product.where(title: []).sum(:price)
-Product Sum (17.5ms)  SELECT SUM(“products”.“price”) FROM “products” WHERE 1=0
-=&gt; 0 &lt;/p&gt;
-&lt;p&gt;  =&gt; Product.where(title: []).average(:price)
-Product Average (3.5ms)  SELECT AVG(“products”.“price”) FROM “products” WHERE 1=0
-=&gt; nil &lt;/p&gt;
-&lt;p&gt;  =&gt; Product.where(title: []).minimum(:id)
-Product Minimum (5.0ms)  SELECT MIN(“products”.“id”) FROM “products” WHERE 1=0
-=&gt; nil &lt;/p&gt;
-&lt;p&gt;  =&gt; Product.where(title: []).maximum(:id)
-Product Minimum (5.0ms)  SELECT MAX(“products”.“id”) FROM “products” WHERE 1=0
-=&gt; nil
-{% endhighlight %}&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;  =&gt; Product.where(title: []).count
+  Product Count (4.7ms)  SELECT COUNT(*) FROM &quot;products&quot; WHERE 1=0
+  =&gt; 0 
+
+
+  =&gt; Product.where(title: []).sum(:price)
+  Product Sum (17.5ms)  SELECT SUM(&quot;products&quot;.&quot;price&quot;) FROM &quot;products&quot; WHERE 1=0
+  =&gt; 0 
+
+
+  =&gt; Product.where(title: []).average(:price)
+  Product Average (3.5ms)  SELECT AVG(&quot;products&quot;.&quot;price&quot;) FROM &quot;products&quot; WHERE 1=0
+  =&gt; nil 
+
+
+  =&gt; Product.where(title: []).minimum(:id)
+  Product Minimum (5.0ms)  SELECT MIN(&quot;products&quot;.&quot;id&quot;) FROM &quot;products&quot; WHERE 1=0
+  =&gt; nil 
+
+
+  =&gt; Product.where(title: []).maximum(:id)
+  Product Minimum (5.0ms)  SELECT MAX(&quot;products&quot;.&quot;id&quot;) FROM &quot;products&quot; WHERE 1=0
+  =&gt; nil &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;As it can be seen,
 it would make a query to the database even when passed a contradiction.&lt;/p&gt;
 &lt;h4 id=&quot;after&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#after&quot; aria-label=&quot;after permalink&quot; class=&quot;anchor before&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; focusable=&quot;false&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;After&lt;/h4&gt;
 &lt;p&gt;Now after Rails 7, it avoids making a query to the database.&lt;/p&gt;
-&lt;p&gt;{% highlight ruby %}
-=&gt; Product.where(title: []).count
-=&gt; 0 &lt;/p&gt;
-&lt;p&gt;  =&gt; Product.where(title: []).sum(:price)
-=&gt; 0 &lt;/p&gt;
-&lt;p&gt;  =&gt; Product.where(title: []).average(:price)
-=&gt; nil &lt;/p&gt;
-&lt;p&gt;  =&gt; Product.where(title: []).minimum(:id)
-=&gt; nil &lt;/p&gt;
-&lt;p&gt;  =&gt; Product.where(title: []).maximum(:id)
-=&gt; nil&lt;br&gt;
-{% endhighlight %}&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;  =&gt; Product.where(title: []).count
+  =&gt; 0 
+
+
+  =&gt; Product.where(title: []).sum(:price)
+  =&gt; 0 
+
+
+  =&gt; Product.where(title: []).average(:price)
+  =&gt; nil 
+
+
+  =&gt; Product.where(title: []).minimum(:id)
+  =&gt; nil 
+
+
+  =&gt; Product.where(title: []).maximum(:id)
+  =&gt; nil  &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;Check out
 &lt;a href=&quot;https://github.com/rails/rails/pull/45030&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;the PR&lt;/a&gt;
 for more details.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Overuse of Rails engines]]></title><description><![CDATA[In this post, we will see how the overuse of engines could lead to some serious issues.]]></description><link>https://lumen.netlify.com/posts/rails-overuse-engine</link><guid isPermaLink="false">https://lumen.netlify.com/posts/rails-overuse-engine</guid><pubDate>Thu, 30 Jun 2022 18:00:37 GMT</pubDate><content:encoded>&lt;p&gt;All of us would have used the well-known &lt;a href=&quot;https://github.com/heartcombo/devise&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;Devise&lt;/a&gt;

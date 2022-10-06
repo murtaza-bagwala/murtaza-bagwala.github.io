@@ -66,33 +66,29 @@ ActiveRecord inclusivity/exclusivity validators.</p>
 where the price needs to be within 5000,
 we’d have to follow this method-</p>
 <h4 id="before" style="position:relative;"><a href="#before" aria-label="before permalink" class="anchor before"><svg aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Before</h4>
-<p>{% highlight ruby %}</p>
-<p>  class Product &#x3C; ApplicationRecord</p>
-<div class="gatsby-highlight" data-language="text"><pre class="language-text"><code class="language-text">validates_inclusion_of :price, in: 0..5000</code></pre></div>
-<p>  end</p>
-<p>{% endhighlight %}</p>
+<div class="gatsby-highlight" data-language="text"><pre class="language-text"><code class="language-text">  class Product &lt; ApplicationRecord
+
+    validates_inclusion_of :price, in: 0..5000
+
+  end</code></pre></div>
 <p>Also, if we would try adding beginless range,
 then it will throw an error.</p>
-<p>{% highlight ruby %}</p>
-<p>  => Product.create(title: “Detergent”, description: “A mixture of surfactants with cleansing properties”, price: 4000)
-/Users/.rvm/gems/ruby-3.0.2/gems/activemodel-7.0.3/lib/active_model/validations/clusivity.rb:45:in `first’: cannot get the first element of beginless range (RangeError)</p>
-<p>{% endhighlight %}</p>
+<div class="gatsby-highlight" data-language="text"><pre class="language-text"><code class="language-text">  => Product.create(title: "Detergent", description: "A mixture of surfactants with cleansing properties", price: 4000)
+  /Users/.rvm/gems/ruby-3.0.2/gems/activemodel-7.0.3/lib/active_model/validations/clusivity.rb:45:in `first': cannot get the first element of beginless range (RangeError)</code></pre></div>
 <p>As it can be seen,
 it throws an error saying <code class="language-text">cannot get the first element of beginless range</code>.</p>
 <h4 id="after" style="position:relative;"><a href="#after" aria-label="after permalink" class="anchor before"><svg aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>After</h4>
 <p>After Rails 7,
 we can now add the beginless range.</p>
-<p>{% highlight ruby %}</p>
-<p>  class Product &#x3C; ApplicationRecord</p>
-<div class="gatsby-highlight" data-language="text"><pre class="language-text"><code class="language-text">validates_inclusion_of :price, in: ..5000</code></pre></div>
-<p>  end</p>
-<p>{% endhighlight %}</p>
-<p>{% highlight ruby %}</p>
-<p>  => Product.create(title: “Detergent”, description: “A mixture of surfactants with cleansing properties”, price: 4000)
-=> TRANSACTION (7.5ms)  BEGIN
-Product Create (5.0ms)  INSERT INTO “products” (“name”, “description”, “created<em>at”, “updated</em>at”, “price”) VALUES (<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">1,</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8388800000000001em;vertical-align:-0.19444em;"></span><span class="mord">1</span><span class="mpunct">,</span></span></span></span>2, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">3,</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8388800000000001em;vertical-align:-0.19444em;"></span><span class="mord">3</span><span class="mpunct">,</span></span></span></span>4, $5) RETURNING “id”  [[“name”, “Detergent”], [“description”, “A mixture of surfactants with cleansing properties”], [“created_at”, “2022-08-10 20:10:06.227125”], [“updated_at”, “2022-08-10 20:10:06.227125”], [“price”, 4000]]
-TRANSACTION (2.5ms)  COMMIT                                                                                      </p>
-<p>{% endhighlight %}</p>
+<div class="gatsby-highlight" data-language="text"><pre class="language-text"><code class="language-text">  class Product &lt; ApplicationRecord
+
+    validates_inclusion_of :price, in: ..5000
+
+  end</code></pre></div>
+<div class="gatsby-highlight" data-language="text"><pre class="language-text"><code class="language-text">  => Product.create(title: "Detergent", description: "A mixture of surfactants with cleansing properties", price: 4000)
+  => TRANSACTION (7.5ms)  BEGIN
+  Product Create (5.0ms)  INSERT INTO "products" ("name", "description", "created_at", "updated_at", "price") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Detergent"], ["description", "A mixture of surfactants with cleansing properties"], ["created_at", "2022-08-10 20:10:06.227125"], ["updated_at", "2022-08-10 20:10:06.227125"], ["price", 4000]]
+  TRANSACTION (2.5ms)  COMMIT                                                                                      </code></pre></div>
 <p>Check out
 <a href="https://github.com/rails/rails/pull/45123" target="_blank" rel="nofollow noopener noreferrer">the PR</a>
 for more details.</p></div></div></div><div class="Post-module--post__footer--3WzWU"><div><p class="Meta-module--meta__date--29eD7">Published <!-- -->18 Aug 2022</p></div><div class="Tags-module--tags--1L_ct"><ul class="Tags-module--tags__list--91FqN"><li class="Tags-module--tags__list-item--1M30P"><a class="Tags-module--tags__list-item-link--3SL_8" href="/tag/rails/">rails</a></li><li class="Tags-module--tags__list-item--1M30P"><a class="Tags-module--tags__list-item-link--3SL_8" href="/tag/rails-7/">rails-7</a></li></ul></div><div class="Author-module--author--2Yefr"><p>Software Craftsman and Functional Programming enthusiast. Exploring GraphQL and React<a class="Author-module--author__bio-twitter--n-O9n" href="https://www.twitter.com/undefined" rel="noopener noreferrer" target="_blank"><strong>Murtaza Bagwala</strong> on Twitter</a></p></div></div><div class="Post-module--post__comments--25y6I"></div></div></div></div><div id="gatsby-announcer" style="position:absolute;top:0;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0" aria-live="assertive" aria-atomic="true"></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/posts/rails-beginless-inclusion";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"polyfill":["/polyfill-51869ef85ddae52b32a4.js"],"app":["/app-af190c9315252d00d4ac.js"],"component---cache-caches-gatsby-plugin-offline-app-shell-js":["/component---cache-caches-gatsby-plugin-offline-app-shell-js-2f9004dcb1f826313e67.js"],"component---src-templates-categories-list-template-js":["/component---src-templates-categories-list-template-js-896678bda0284b1eb3a5.js"],"component---src-templates-category-template-js":["/component---src-templates-category-template-js-bf2b3528e874f3cbbd56.js"],"component---src-templates-index-template-js":["/component---src-templates-index-template-js-bcc99e126ce760810e81.js"],"component---src-templates-not-found-template-js":["/component---src-templates-not-found-template-js-9ae8c9f4b8256d5be2f8.js"],"component---src-templates-page-template-js":["/component---src-templates-page-template-js-3edd3fe5e80e0314aeb3.js"],"component---src-templates-post-template-js":["/component---src-templates-post-template-js-7c00aa10c128efdc3705.js"],"component---src-templates-tag-template-js":["/component---src-templates-tag-template-js-ffc7c37bfd8dfeba5616.js"],"component---src-templates-tags-list-template-js":["/component---src-templates-tags-list-template-js-abb6898e5566bb492129.js"]};/*]]>*/</script><script src="/polyfill-51869ef85ddae52b32a4.js" nomodule=""></script><script src="/component---src-templates-post-template-js-7c00aa10c128efdc3705.js" async=""></script><script src="/643651a62fb35a9bb4f20061cb1f214a352d7976-69497aa94f3820458336.js" async=""></script><script src="/cd95ea5cbd2c605f26db819f07999610c9ff4310-60b1b7c4689557375f68.js" async=""></script><script src="/styles-0ec71dd62c66cb95665c.js" async=""></script><script src="/app-af190c9315252d00d4ac.js" async=""></script><script src="/532a2f07-3a76190e4ba81461ce95.js" async=""></script><script src="/framework-1b174197fe6013c4312d.js" async=""></script><script src="/webpack-runtime-d9f2838020e9be0f3ccc.js" async=""></script></body></html>

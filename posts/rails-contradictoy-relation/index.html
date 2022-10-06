@@ -62,47 +62,57 @@
 even when passed a contradiction,
 <a href="https://github.com/jhawthorn/rails/blob/main/activerecord/lib/active_record/relation/where_clause.rb#L99" target="_blank" rel="nofollow noopener noreferrer">contradiction relation</a>
 means passing an empty array for eg:-</p>
-<p>{% highlight ruby %}
-User.where(id: []).count
-{% endhighlight %}</p>
+<div class="gatsby-highlight" data-language="text"><pre class="language-text"><code class="language-text">  User.where(id: []).count</code></pre></div>
 <p>It does not make sense to call a database for such contradictory relations.</p>
 <h4 id="before" style="position:relative;"><a href="#before" aria-label="before permalink" class="anchor before"><svg aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Before</h4>
 <p>So, before Rails 7 was introduced,
 the database was called if the relation used for <code class="language-text">count</code>, <code class="language-text">sum</code>, <code class="language-text">average</code>, <code class="language-text">minimum</code>
 and <code class="language-text">maximum</code> would be contradictory.</p>
-<p>{% highlight ruby %}
-=> Product.where(title: []).count
-Product Count (4.7ms)  SELECT COUNT(*) FROM “products” WHERE 1=0
-=> 0 </p>
-<p>  => Product.where(title: []).sum(:price)
-Product Sum (17.5ms)  SELECT SUM(“products”.“price”) FROM “products” WHERE 1=0
-=> 0 </p>
-<p>  => Product.where(title: []).average(:price)
-Product Average (3.5ms)  SELECT AVG(“products”.“price”) FROM “products” WHERE 1=0
-=> nil </p>
-<p>  => Product.where(title: []).minimum(:id)
-Product Minimum (5.0ms)  SELECT MIN(“products”.“id”) FROM “products” WHERE 1=0
-=> nil </p>
-<p>  => Product.where(title: []).maximum(:id)
-Product Minimum (5.0ms)  SELECT MAX(“products”.“id”) FROM “products” WHERE 1=0
-=> nil
-{% endhighlight %}</p>
+<div class="gatsby-highlight" data-language="text"><pre class="language-text"><code class="language-text">  => Product.where(title: []).count
+  Product Count (4.7ms)  SELECT COUNT(*) FROM "products" WHERE 1=0
+  => 0 
+
+
+  => Product.where(title: []).sum(:price)
+  Product Sum (17.5ms)  SELECT SUM("products"."price") FROM "products" WHERE 1=0
+  => 0 
+
+
+  => Product.where(title: []).average(:price)
+  Product Average (3.5ms)  SELECT AVG("products"."price") FROM "products" WHERE 1=0
+  => nil 
+
+
+  => Product.where(title: []).minimum(:id)
+  Product Minimum (5.0ms)  SELECT MIN("products"."id") FROM "products" WHERE 1=0
+  => nil 
+
+
+  => Product.where(title: []).maximum(:id)
+  Product Minimum (5.0ms)  SELECT MAX("products"."id") FROM "products" WHERE 1=0
+  => nil </code></pre></div>
 <p>As it can be seen,
 it would make a query to the database even when passed a contradiction.</p>
 <h4 id="after" style="position:relative;"><a href="#after" aria-label="after permalink" class="anchor before"><svg aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>After</h4>
 <p>Now after Rails 7, it avoids making a query to the database.</p>
-<p>{% highlight ruby %}
-=> Product.where(title: []).count
-=> 0 </p>
-<p>  => Product.where(title: []).sum(:price)
-=> 0 </p>
-<p>  => Product.where(title: []).average(:price)
-=> nil </p>
-<p>  => Product.where(title: []).minimum(:id)
-=> nil </p>
-<p>  => Product.where(title: []).maximum(:id)
-=> nil<br>
-{% endhighlight %}</p>
+<div class="gatsby-highlight" data-language="text"><pre class="language-text"><code class="language-text">  => Product.where(title: []).count
+  => 0 
+
+
+  => Product.where(title: []).sum(:price)
+  => 0 
+
+
+  => Product.where(title: []).average(:price)
+  => nil 
+
+
+  => Product.where(title: []).minimum(:id)
+  => nil 
+
+
+  => Product.where(title: []).maximum(:id)
+  => nil  </code></pre></div>
 <p>Check out
 <a href="https://github.com/rails/rails/pull/45030" target="_blank" rel="nofollow noopener noreferrer">the PR</a>
 for more details.</p></div></div></div><div class="Post-module--post__footer--3WzWU"><div><p class="Meta-module--meta__date--29eD7">Published <!-- -->20 Jul 2022</p></div><div class="Tags-module--tags--1L_ct"><ul class="Tags-module--tags__list--91FqN"><li class="Tags-module--tags__list-item--1M30P"><a class="Tags-module--tags__list-item-link--3SL_8" href="/tag/rails/">rails</a></li><li class="Tags-module--tags__list-item--1M30P"><a class="Tags-module--tags__list-item-link--3SL_8" href="/tag/rails-7/">rails-7</a></li></ul></div><div class="Author-module--author--2Yefr"><p>Software Craftsman and Functional Programming enthusiast. Exploring GraphQL and React<a class="Author-module--author__bio-twitter--n-O9n" href="https://www.twitter.com/undefined" rel="noopener noreferrer" target="_blank"><strong>Murtaza Bagwala</strong> on Twitter</a></p></div></div><div class="Post-module--post__comments--25y6I"></div></div></div></div><div id="gatsby-announcer" style="position:absolute;top:0;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0" aria-live="assertive" aria-atomic="true"></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/posts/rails-contradictoy-relation";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"polyfill":["/polyfill-51869ef85ddae52b32a4.js"],"app":["/app-af190c9315252d00d4ac.js"],"component---cache-caches-gatsby-plugin-offline-app-shell-js":["/component---cache-caches-gatsby-plugin-offline-app-shell-js-2f9004dcb1f826313e67.js"],"component---src-templates-categories-list-template-js":["/component---src-templates-categories-list-template-js-896678bda0284b1eb3a5.js"],"component---src-templates-category-template-js":["/component---src-templates-category-template-js-bf2b3528e874f3cbbd56.js"],"component---src-templates-index-template-js":["/component---src-templates-index-template-js-bcc99e126ce760810e81.js"],"component---src-templates-not-found-template-js":["/component---src-templates-not-found-template-js-9ae8c9f4b8256d5be2f8.js"],"component---src-templates-page-template-js":["/component---src-templates-page-template-js-3edd3fe5e80e0314aeb3.js"],"component---src-templates-post-template-js":["/component---src-templates-post-template-js-7c00aa10c128efdc3705.js"],"component---src-templates-tag-template-js":["/component---src-templates-tag-template-js-ffc7c37bfd8dfeba5616.js"],"component---src-templates-tags-list-template-js":["/component---src-templates-tags-list-template-js-abb6898e5566bb492129.js"]};/*]]>*/</script><script src="/polyfill-51869ef85ddae52b32a4.js" nomodule=""></script><script src="/component---src-templates-post-template-js-7c00aa10c128efdc3705.js" async=""></script><script src="/643651a62fb35a9bb4f20061cb1f214a352d7976-69497aa94f3820458336.js" async=""></script><script src="/cd95ea5cbd2c605f26db819f07999610c9ff4310-60b1b7c4689557375f68.js" async=""></script><script src="/styles-0ec71dd62c66cb95665c.js" async=""></script><script src="/app-af190c9315252d00d4ac.js" async=""></script><script src="/532a2f07-3a76190e4ba81461ce95.js" async=""></script><script src="/framework-1b174197fe6013c4312d.js" async=""></script><script src="/webpack-runtime-d9f2838020e9be0f3ccc.js" async=""></script></body></html>
