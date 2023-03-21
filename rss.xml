@@ -1,4 +1,104 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Tech Blog by Murtaza Bagwala]]></title><description><![CDATA[A place where I love to share my opinions and experiences.]]></description><link>https://lumen.netlify.com</link><generator>GatsbyJS</generator><lastBuildDate>Thu, 06 Oct 2022 14:48:28 GMT</lastBuildDate><item><title><![CDATA[How to set up a CI/CD workflow for Expo React Native application using Github Actions.]]></title><description><![CDATA[In this blog, we will see how to set up a CI/CD workflow using Github Actions for the Expo React Native application.]]></description><link>https://lumen.netlify.com/posts/expo-react-native</link><guid isPermaLink="false">https://lumen.netlify.com/posts/expo-react-native</guid><pubDate>Mon, 12 Sep 2022 18:00:37 GMT</pubDate><content:encoded>&lt;p&gt;&lt;a href=&quot;https://zuehlke.github.io/machines-code-people/articles/ci-cd-done-right.html&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;CI/CD&lt;/a&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Tech Blog by Murtaza Bagwala]]></title><description><![CDATA[A place where I love to share my opinions and experiences.]]></description><link>https://lumen.netlify.com</link><generator>GatsbyJS</generator><lastBuildDate>Tue, 21 Mar 2023 17:12:37 GMT</lastBuildDate><item><title><![CDATA[Rails adds include_seconds option to datetime_field.]]></title><description><![CDATA[Rails now allows to omit seconds part in the input field by adding the include_seconds option to datetime_field.]]></description><link>https://lumen.netlify.com/posts/rails-increment-decrement</link><guid isPermaLink="false">https://lumen.netlify.com/posts/rails-increment-decrement</guid><pubDate>Thu, 09 Feb 2023 18:00:37 GMT</pubDate><content:encoded>&lt;p&gt;Previously, to exclude seconds from datetime,
+we had to parse datetime using &lt;code class=&quot;language-text&quot;&gt;strftime&lt;/code&gt;.&lt;/p&gt;
+&lt;h5 id=&quot;before&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#before&quot; aria-label=&quot;before permalink&quot; class=&quot;anchor before&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; focusable=&quot;false&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Before&lt;/h5&gt;
+&lt;p&gt;Let’s say we have a &lt;code class=&quot;language-text&quot;&gt;Product&lt;/code&gt; model
+and we need to show &lt;code class=&quot;language-text&quot;&gt;purchased_at&lt;/code&gt; as a date time field excluding seconds.&lt;/p&gt;
+&lt;p&gt;This is our &lt;code class=&quot;language-text&quot;&gt;ProductsController&lt;/code&gt;.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;  class ProductsController &amp;lt; ApplicationController
+    def show
+      @product = Product.find(params[:id])
+      render :show
+    end
+  end&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;And this is how our &lt;code class=&quot;language-text&quot;&gt;views/products/show.html.erb&lt;/code&gt; would look like.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;  &amp;lt;h1&gt;Product Detail&amp;lt;/h1&gt;
+
+  &amp;lt;table class=&quot;table table-hover&quot;&gt;
+  &amp;lt;tbody&gt;
+    &amp;lt;tr&gt;
+      &amp;lt;%= form_with model: @product do |form| %&gt;
+        &amp;lt;%= datetime_field(&quot;product&quot;, &quot;purchased_at&quot;, value: @product.purchased_at.strftime(&quot;%Y-%m-%dT%H:%M&quot;)) %&gt;
+      &amp;lt;% end %&gt;
+    &amp;lt;/tr&gt;
+  &amp;lt;/tbody&gt;
+
+&amp;lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;And this is how it will get rendered on the browser.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/time.png&quot; alt=&quot;alt&quot;&gt;&lt;/p&gt;
+&lt;h4 id=&quot;after&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#after&quot; aria-label=&quot;after permalink&quot; class=&quot;anchor before&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; focusable=&quot;false&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;After&lt;/h4&gt;
+&lt;p&gt;Now, Rails allows adding a &lt;code class=&quot;language-text&quot;&gt;include_seconds&lt;/code&gt; option to &lt;code class=&quot;language-text&quot;&gt;datetime_field&lt;/code&gt;,
+using which we can include/exclude the seconds.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;  &amp;lt;h1&gt;Product Detail&amp;lt;/h1&gt;
+
+  &amp;lt;table class=&quot;table table-hover&quot;&gt;
+  &amp;lt;tbody&gt;
+    &amp;lt;tr&gt;
+      &amp;lt;%= form_with model: @product do |form| %&gt;
+        &amp;lt;%= datetime_field(&quot;product&quot;, &quot;purchased_at&quot;, include_seconds: false) %&gt;
+      &amp;lt;% end %&gt;
+    &amp;lt;/tr&gt;
+  &amp;lt;/tbody&gt;
+
+&amp;lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;This is how a browser renders it.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/time.png&quot; alt=&quot;alt&quot;&gt;&lt;/p&gt;
+&lt;p&gt;And suppose we need to include the seconds,
+we can pass &lt;code class=&quot;language-text&quot;&gt;include_seconds&lt;/code&gt; as &lt;code class=&quot;language-text&quot;&gt;true&lt;/code&gt;.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;  &amp;lt;h1&gt;Product Detail&amp;lt;/h1&gt;
+
+  &amp;lt;table class=&quot;table table-hover&quot;&gt;
+  &amp;lt;tbody&gt;
+    &amp;lt;tr&gt;
+      &amp;lt;td&gt;
+      &amp;lt;%= form_with model: @product do |form| %&gt;
+        &amp;lt;%= datetime_field(&quot;product&quot;, &quot;purchased_at&quot;, include_seconds: true) %&gt;
+      &amp;lt;% end %&gt;
+    &amp;lt;/tr&gt;
+  &amp;lt;/tbody&gt;
+
+&amp;lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;img src=&quot;/seconds.png&quot; alt=&quot;alt&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Check out
+&lt;a href=&quot;https://github.com/rails/rails/pull/45188&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;the PR&lt;/a&gt;
+for more details.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Rails preserves entry TTL when incrementing or decrementing an integer value.]]></title><description><![CDATA[Rails now preserve expires_in while incrementing or decrementing an integer value in MemoryStore to be more consistent with MemCacheStore and RedisCacheStore.]]></description><link>https://lumen.netlify.com/posts/rails-preserve-ttl</link><guid isPermaLink="false">https://lumen.netlify.com/posts/rails-preserve-ttl</guid><pubDate>Sat, 07 Jan 2023 18:00:37 GMT</pubDate><content:encoded>&lt;p&gt;Caching solutions like MemCache
+and Redis always preserve expiration,
+while altering a value to avoid any discrepancies caused by it.
+Previously, while incrementing
+or decrementing an integer value in MemoryStore,
+Rails used to reset the &lt;code class=&quot;language-text&quot;&gt;expires_in&lt;/code&gt; associated with the entry, for eg-&lt;/p&gt;
+&lt;h5 id=&quot;before&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#before&quot; aria-label=&quot;before permalink&quot; class=&quot;anchor before&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; focusable=&quot;false&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Before&lt;/h5&gt;
+&lt;p&gt;Let’s say, we are storing certain number of likes on a product
+as a &lt;code class=&quot;language-text&quot;&gt;like_counter&lt;/code&gt; in MemoryStore for 10 seconds.
+Here, if we increment
+or decrement the counter,
+it is used to reset the TTL.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;irb(main):004:0&gt; cache = ActiveSupport::Cache.lookup_store(:memory_store)
+irb(main):004:0&gt; cache.write(&quot;like_counter&quot;, 1, raw: true, expires_in: 10.seconds)
+irb(main):004:0&gt; sleep(2.seconds)
+irb(main):004:0&gt; cache.increment(&quot;like_counter&quot;)
+irb(main):004:0&gt; sleep(8.seconds)
+irb(main):004:0&gt; cache.read(&quot;like_counter&quot;)
+irb(main):004:0&gt; 2&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;As we can see after 10 seconds, &lt;code class=&quot;language-text&quot;&gt;like_counter&lt;/code&gt; should have been deleted from the store, however,
+it still shows the incremented value because &lt;code class=&quot;language-text&quot;&gt;cache.increment(&quot;like_counter&quot;)&lt;/code&gt; set the timer
+again to 10 seconds.&lt;/p&gt;
+&lt;h4 id=&quot;after&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#after&quot; aria-label=&quot;after permalink&quot; class=&quot;anchor before&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; focusable=&quot;false&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;After&lt;/h4&gt;
+&lt;p&gt;Now, Rails preserves expires_in while incrementing
+or decrementing an integer value in MemoryStore.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;irb(main):004:0&gt; cache = ActiveSupport::Cache.lookup_store(:memory_store)
+irb(main):004:0&gt; cache.write(&quot;like_counter&quot;, 1, raw: true, expires_in: 10.seconds)
+irb(main):004:0&gt; sleep(2.seconds)
+irb(main):004:0&gt; cache.increment(&quot;like_counter&quot;)
+irb(main):004:0&gt; sleep(8.seconds)
+irb(main):004:0&gt; cache.read(&quot;like_counter&quot;)
+irb(main):004:0&gt; nil&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;As it can be seen,
+though we had incremented the counter,
+the key got expired after 10 seconds
+and returned &lt;code class=&quot;language-text&quot;&gt;nil&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Check out
+&lt;a href=&quot;https://github.com/rails/rails/pull/46305&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;the PR&lt;/a&gt;
+for more details.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[How to set up a CI/CD workflow for Expo React Native application using Github Actions.]]></title><description><![CDATA[In this blog, we will see how to set up a CI/CD workflow using Github Actions for the Expo React Native application.]]></description><link>https://lumen.netlify.com/posts/expo-react-native</link><guid isPermaLink="false">https://lumen.netlify.com/posts/expo-react-native</guid><pubDate>Mon, 12 Sep 2022 18:00:37 GMT</pubDate><content:encoded>&lt;p&gt;&lt;a href=&quot;https://zuehlke.github.io/machines-code-people/articles/ci-cd-done-right.html&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;CI/CD&lt;/a&gt;
 is one of the most important practices of &lt;a href=&quot;http://www.extremeprogramming.org/when.html&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;XP&lt;/a&gt;.
 Having set this up since the beginning can help in identify
 and fix issues earlier and faster time to market.
