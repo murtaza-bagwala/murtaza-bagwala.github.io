@@ -5,7 +5,7 @@
   X-XSS-Protection: 1; mode=block
   X-Content-Type-Options: nosniff
   Referrer-Policy: same-origin
-/styles.6263a9c2913341319959.css
+/styles.c0f2782165ca17191e81.css
   Cache-Control: public, max-age=31536000, immutable
 /75fc9c18-a7140260a6775d684953.js.LICENSE.txt
   Cache-Control: public, max-age=31536000, immutable
@@ -20,6 +20,8 @@
 /framework-df177803de5cb416bb55.js.LICENSE.txt
   Cache-Control: public, max-age=31536000, immutable
 /app-8eeca02ca2cadae77118.js
+  Cache-Control: public, max-age=31536000, immutable
+/webpack-runtime-54ff2524547074b78bae.js
   Cache-Control: public, max-age=31536000, immutable
 /component---cache-caches-gatsby-plugin-offline-app-shell-js-02abafd21f3ca3501462.js
   Cache-Control: public, max-age=31536000, immutable
@@ -49,6 +51,8 @@
   Cache-Control: public, max-age=31536000, immutable
 /app-8eeca02ca2cadae77118.js.map
   Cache-Control: public, max-age=31536000, immutable
+/webpack-runtime-54ff2524547074b78bae.js.map
+  Cache-Control: public, max-age=31536000, immutable
 /component---cache-caches-gatsby-plugin-offline-app-shell-js-02abafd21f3ca3501462.js.map
   Cache-Control: public, max-age=31536000, immutable
 /component---src-templates-categories-list-template-js-9f2f78a4ca7152b7d57b.js.map
@@ -75,11 +79,9 @@
   Cache-Control: public, max-age=31536000, immutable
 /20e19934c602d69589a9213124171ceb5d7986a3-643b54f60d2ab2b0559c.js.map
   Cache-Control: public, max-age=31536000, immutable
-/webpack-runtime-33a43da8d97fa9629c98.js
+/webpack-runtime-1947a0795d0091e00876.js.map
   Cache-Control: public, max-age=31536000, immutable
 /webpack-runtime-33a43da8d97fa9629c98.js.map
-  Cache-Control: public, max-age=31536000, immutable
-/webpack-runtime-1947a0795d0091e00876.js.map
   Cache-Control: public, max-age=31536000, immutable
 /static/*
   Cache-Control: public, max-age=31536000, immutable
