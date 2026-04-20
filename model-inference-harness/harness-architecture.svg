@@ -1,1 +1,72 @@
-<svg width="860" height="200" xmlns="http://www.w3.org/2000/svg" font-family="ui-monospace, 'Courier New', monospace"><defs><marker id="a" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><path fill="#555" d="M0 0l10 3.5L0 7z"/></marker></defs><rect width="860" height="200" fill="#fafafa" rx="10" stroke="#e0e0e0"/><text x="430" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#222" letter-spacing=".5">Model Harness — Request Flow</text><rect x="18" y="55" width="118" height="80" rx="7" fill="#3b82f6"/><text x="77" y="92" text-anchor="middle" font-size="12" fill="#fff" font-weight="600">Raw Input</text><text x="77" y="108" text-anchor="middle" font-size="10" fill="#dbeafe">JSON / image</text><text x="77" y="122" text-anchor="middle" font-size="10" fill="#dbeafe">/ raw text</text><path stroke="#555" stroke-width="2" marker-end="url(#a)" d="M136 95h22"/><rect x="158" y="55" width="118" height="80" rx="7" fill="#f59e0b"/><text x="217" y="92" text-anchor="middle" font-size="12" fill="#fff" font-weight="600">Validate</text><text x="217" y="108" text-anchor="middle" font-size="10" fill="#fef3c7">check types</text><text x="217" y="122" text-anchor="middle" font-size="10" fill="#fef3c7">empty input etc.</text><path stroke="#555" stroke-width="2" marker-end="url(#a)" d="M276 95h22"/><rect x="298" y="55" width="118" height="80" rx="7" fill="#f59e0b"/><text x="357" y="92" text-anchor="middle" font-size="12" fill="#fff" font-weight="600">Preprocess</text><text x="357" y="108" text-anchor="middle" font-size="10" fill="#fef3c7">normalize / scale</text><text x="357" y="122" text-anchor="middle" font-size="10" fill="#fef3c7">vectorize</text><path stroke="#555" stroke-width="2" marker-end="url(#a)" d="M416 95h22"/><rect x="438" y="42" width="130" height="106" rx="9" fill="#10b981"/><rect x="442" y="46" width="122" height="98" rx="7" fill="#059669"/><text x="503" y="92" text-anchor="middle" font-size="13" fill="#fff" font-weight="700">Model</text><text x="503" y="108" text-anchor="middle" font-size="10" fill="#d1fae5">forward pass</text><text x="503" y="122" text-anchor="middle" font-size="10" fill="#d1fae5">predict()</text><path stroke="#555" stroke-width="2" marker-end="url(#a)" d="M568 95h22"/><rect x="590" y="55" width="118" height="80" rx="7" fill="#f59e0b"/><text x="649" y="92" text-anchor="middle" font-size="12" fill="#fff" font-weight="600">Postprocess</text><text x="649" y="108" text-anchor="middle" font-size="10" fill="#fef3c7">index → label</text><text x="649" y="122" text-anchor="middle" font-size="10" fill="#fef3c7">add confidence</text><path stroke="#555" stroke-width="2" marker-end="url(#a)" d="M708 95h22"/><rect x="730" y="55" width="112" height="80" rx="7" fill="#8b5cf6"/><text x="786" y="92" text-anchor="middle" font-size="12" fill="#fff" font-weight="600">Response</text><text x="786" y="108" text-anchor="middle" font-size="10" fill="#ede9fe">{&quot;label&quot;:</text><text x="786" y="122" text-anchor="middle" font-size="10" fill="#ede9fe">&quot;negative&quot;}</text><text x="77" y="158" text-anchor="middle" font-size="9" fill="#6b7280">user side</text><text x="357" y="158" text-anchor="middle" font-size="9" fill="#6b7280">harness</text><text x="503" y="162" text-anchor="middle" font-size="9" fill="#6b7280">model</text><text x="649" y="158" text-anchor="middle" font-size="9" fill="#6b7280">harness</text><text x="786" y="158" text-anchor="middle" font-size="9" fill="#6b7280">user side</text></svg>
+<svg width="860" height="200" xmlns="http://www.w3.org/2000/svg" font-family="ui-monospace, 'Courier New', monospace">
+  <defs>
+    <marker id="arrowH" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#555"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="860" height="200" fill="#fafafa" rx="10" stroke="#e0e0e0" stroke-width="1"/>
+
+  <!-- Title -->
+  <text x="430" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#222" letter-spacing="0.5">Model Harness — Request Flow</text>
+
+  <!-- Step 1: Raw Input -->
+  <rect x="18" y="55" width="118" height="80" rx="7" fill="#3b82f6"/>
+  <text x="77" y="92" text-anchor="middle" font-size="12" fill="white" font-weight="600">Raw Input</text>
+  <text x="77" y="108" text-anchor="middle" font-size="10" fill="#dbeafe">JSON / image</text>
+  <text x="77" y="122" text-anchor="middle" font-size="10" fill="#dbeafe">/ raw text</text>
+
+  <!-- Arrow -->
+  <line x1="136" y1="95" x2="158" y2="95" stroke="#555" stroke-width="2" marker-end="url(#arrowH)"/>
+
+  <!-- Step 2: Validate -->
+  <rect x="158" y="55" width="118" height="80" rx="7" fill="#f59e0b"/>
+  <text x="217" y="92" text-anchor="middle" font-size="12" fill="white" font-weight="600">Validate</text>
+  <text x="217" y="108" text-anchor="middle" font-size="10" fill="#fef3c7">check types</text>
+  <text x="217" y="122" text-anchor="middle" font-size="10" fill="#fef3c7">empty input etc.</text>
+
+  <!-- Arrow -->
+  <line x1="276" y1="95" x2="298" y2="95" stroke="#555" stroke-width="2" marker-end="url(#arrowH)"/>
+
+  <!-- Step 3: Preprocess -->
+  <rect x="298" y="55" width="118" height="80" rx="7" fill="#f59e0b"/>
+  <text x="357" y="92" text-anchor="middle" font-size="12" fill="white" font-weight="600">Preprocess</text>
+  <text x="357" y="108" text-anchor="middle" font-size="10" fill="#fef3c7">normalize / scale</text>
+  <text x="357" y="122" text-anchor="middle" font-size="10" fill="#fef3c7">vectorize</text>
+
+  <!-- Arrow -->
+  <line x1="416" y1="95" x2="438" y2="95" stroke="#555" stroke-width="2" marker-end="url(#arrowH)"/>
+
+  <!-- Step 4: Model (highlighted) -->
+  <rect x="438" y="42" width="130" height="106" rx="9" fill="#10b981"/>
+  <rect x="442" y="46" width="122" height="98" rx="7" fill="#059669"/>
+  <text x="503" y="92" text-anchor="middle" font-size="13" fill="white" font-weight="700">Model</text>
+  <text x="503" y="108" text-anchor="middle" font-size="10" fill="#d1fae5">forward pass</text>
+  <text x="503" y="122" text-anchor="middle" font-size="10" fill="#d1fae5">predict()</text>
+
+  <!-- Arrow -->
+  <line x1="568" y1="95" x2="590" y2="95" stroke="#555" stroke-width="2" marker-end="url(#arrowH)"/>
+
+  <!-- Step 5: Postprocess -->
+  <rect x="590" y="55" width="118" height="80" rx="7" fill="#f59e0b"/>
+  <text x="649" y="92" text-anchor="middle" font-size="12" fill="white" font-weight="600">Postprocess</text>
+  <text x="649" y="108" text-anchor="middle" font-size="10" fill="#fef3c7">index → label</text>
+  <text x="649" y="122" text-anchor="middle" font-size="10" fill="#fef3c7">add confidence</text>
+
+  <!-- Arrow -->
+  <line x1="708" y1="95" x2="730" y2="95" stroke="#555" stroke-width="2" marker-end="url(#arrowH)"/>
+
+  <!-- Step 6: Response -->
+  <rect x="730" y="55" width="112" height="80" rx="7" fill="#8b5cf6"/>
+  <text x="786" y="92" text-anchor="middle" font-size="12" fill="white" font-weight="600">Response</text>
+  <text x="786" y="108" text-anchor="middle" font-size="10" fill="#ede9fe">{"label":</text>
+  <text x="786" y="122" text-anchor="middle" font-size="10" fill="#ede9fe">"negative"}</text>
+
+  <!-- Legend labels -->
+  <text x="77" y="158" text-anchor="middle" font-size="9" fill="#6b7280">user side</text>
+  <text x="357" y="158" text-anchor="middle" font-size="9" fill="#6b7280">harness</text>
+  <text x="503" y="162" text-anchor="middle" font-size="9" fill="#6b7280">model</text>
+  <text x="649" y="158" text-anchor="middle" font-size="9" fill="#6b7280">harness</text>
+  <text x="786" y="158" text-anchor="middle" font-size="9" fill="#6b7280">user side</text>
+</svg>
