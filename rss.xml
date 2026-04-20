@@ -1,4 +1,246 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[From My Head to the Cloud]]></title><description><![CDATA[Where I put my ideas and experiences into words.]]></description><link>https://murtazabagwala.xyz</link><generator>GatsbyJS</generator><lastBuildDate>Sat, 11 Apr 2026 17:28:45 GMT</lastBuildDate><item><title><![CDATA[Building the Harness: How Real ML Systems Actually Run Models]]></title><description><![CDATA[You trained the model. Now what? This post explains model inference and harness engineering with real code and zero hand-waving.]]></description><link>https://murtazabagwala.xyz/posts/building-the-harness-how-real-ml-systems-run-models</link><guid isPermaLink="false">https://murtazabagwala.xyz/posts/building-the-harness-how-real-ml-systems-run-models</guid><pubDate>Sat, 11 Apr 2026 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Imagine you baked a really good cake. You spent hours getting the recipe right, tested it on friends, got great feedback. Now someone asks you to open a bakery.&lt;/p&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[From My Head to the Cloud]]></title><description><![CDATA[Where I put my ideas and experiences into words.]]></description><link>https://murtazabagwala.xyz</link><generator>GatsbyJS</generator><lastBuildDate>Mon, 20 Apr 2026 16:27:44 GMT</lastBuildDate><item><title><![CDATA[How I Fine-Tuned TinyLlama on My Laptop Using LoRA]]></title><description><![CDATA[A complete walkthrough of fine-tuning a 1.1B parameter model on a Mac using LoRA, merging the adapter, and serving it locally with Ollama.]]></description><link>https://murtazabagwala.xyz/posts/fine-tuning-tinyllama-on-my-laptop-using-lora</link><guid isPermaLink="false">https://murtazabagwala.xyz/posts/fine-tuning-tinyllama-on-my-laptop-using-lora</guid><pubDate>Mon, 20 Apr 2026 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;A few months ago I wanted to understand what actually happens when you fine-tune a language model. Not the theory. The actual process. The code, the wait, the output. Every guide I found assumed you had a beefy GPU and a cloud budget to match. I have a MacBook with an Intel chip and stubbornness.&lt;/p&gt;
+&lt;p&gt;So I built &lt;a href=&quot;https://github.com/murtaza-bagwala/slm-forge&quot;&gt;slm-forge&lt;/a&gt;, a minimal setup to fine-tune TinyLlama on my laptop, deploy it locally via Ollama, and actually use it. This post walks through everything I did, why I made each choice, and what I learned.&lt;/p&gt;
+&lt;h2&gt;Why TinyLlama&lt;/h2&gt;
+&lt;p&gt;TinyLlama is a 1.1 billion parameter language model trained on 3 trillion tokens. It&apos;s small enough to load and run on a laptop, but capable enough to follow instructions and generate coherent text. It&apos;s not GPT-4. But it is a real transformer model with a real attention mechanism, and fine-tuning it teaches you exactly the same concepts you&apos;d apply to a 70B model.&lt;/p&gt;
+&lt;p&gt;Think of it like learning to drive in a small hatchback instead of a truck. The physics is the same, the controls are the same, you&apos;re just not risking as much on each turn.&lt;/p&gt;
+&lt;h2&gt;LoRA vs QLoRA: What They Are and Why It Matters Here&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Full fine-tuning&lt;/strong&gt; means updating every single weight in the model. For a 1.1B model that&apos;s a billion-plus parameters. On a MacBook, that&apos;s not happening.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;LoRA (Low-Rank Adaptation)&lt;/strong&gt; freezes the original weights and plugs in small trainable matrices into the attention layers. Because these matrices are tiny, you only train a fraction of the model. In my setup only 1,126,400 parameters out of 1.1 billion are trained. That&apos;s 0.1%.&lt;/p&gt;
+&lt;p&gt;Think of it like this. A doctor already knows medicine. You want them to specialize in cardiology. You don&apos;t send them back to medical school. You send them to a six-week fellowship. That&apos;s LoRA. Same base knowledge, just a small update on top.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;QLoRA&lt;/strong&gt; takes this further by also compressing the base model to 4-bit precision before training, which cuts memory usage even more. Sounds great, but it depends on a library called &lt;code class=&quot;language-text&quot;&gt;bitsandbytes&lt;/code&gt; that only runs on NVIDIA GPUs via CUDA. No NVIDIA GPU means no QLoRA. On an Intel Mac you&apos;re stuck with plain LoRA, which is exactly what I used.&lt;/p&gt;
+&lt;p&gt;It was enough.&lt;/p&gt;
+&lt;h2&gt;The Libraries&lt;/h2&gt;
+&lt;p&gt;Here&apos;s every key library in the project and what it actually does:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Library&lt;/th&gt;
+&lt;th&gt;Version&lt;/th&gt;
+&lt;th&gt;What it does&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code class=&quot;language-text&quot;&gt;torch&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;2.2.2&lt;/td&gt;
+&lt;td&gt;The foundation. PyTorch handles all tensor operations, gradient tracking, and the training loop under the hood&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code class=&quot;language-text&quot;&gt;transformers&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;4.57.6&lt;/td&gt;
+&lt;td&gt;Hugging Face&apos;s library for loading pretrained models and tokenizers. &lt;code class=&quot;language-text&quot;&gt;AutoModelForCausalLM&lt;/code&gt; loads TinyLlama in one line&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code class=&quot;language-text&quot;&gt;peft&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;0.19.1&lt;/td&gt;
+&lt;td&gt;Parameter-Efficient Fine-Tuning. Provides &lt;code class=&quot;language-text&quot;&gt;LoraConfig&lt;/code&gt; and &lt;code class=&quot;language-text&quot;&gt;get_peft_model&lt;/code&gt; to inject LoRA adapters into the model&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code class=&quot;language-text&quot;&gt;trl&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;1.0.0&lt;/td&gt;
+&lt;td&gt;Transformer Reinforcement Learning. The &lt;code class=&quot;language-text&quot;&gt;SFTTrainer&lt;/code&gt; handles supervised fine-tuning with minimal boilerplate&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code class=&quot;language-text&quot;&gt;datasets&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;4.8.4&lt;/td&gt;
+&lt;td&gt;Hugging Face&apos;s dataset library. Loads the Alpaca dataset directly from the Hub and handles preprocessing&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code class=&quot;language-text&quot;&gt;accelerate&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;1.13.0&lt;/td&gt;
+&lt;td&gt;Abstracts hardware-specific training details. Used here to keep things working on CPU without code changes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code class=&quot;language-text&quot;&gt;safetensors&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;0.7.0&lt;/td&gt;
+&lt;td&gt;Safe format for saving model weights. Faster and more secure than pickle-based &lt;code class=&quot;language-text&quot;&gt;.bin&lt;/code&gt; files&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2&gt;The Setup&lt;/h2&gt;
+&lt;p&gt;Clone the repo and install dependencies:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; clone https://github.com/murtaza-bagwala/slm-forge
+&lt;span class=&quot;token builtin class-name&quot;&gt;cd&lt;/span&gt; slm-forge
+python3 &lt;span class=&quot;token parameter variable&quot;&gt;-m&lt;/span&gt; venv llm-finetune
+&lt;span class=&quot;token builtin class-name&quot;&gt;source&lt;/span&gt; llm-finetune/bin/activate
+pip &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;token parameter variable&quot;&gt;-r&lt;/span&gt; requirements.txt&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;The first time you run the training script, it will download TinyLlama from the Hugging Face Hub. It&apos;s about 2.2GB, so make sure you have the space.&lt;/p&gt;
+&lt;h2&gt;The Training Data&lt;/h2&gt;
+&lt;p&gt;We use the &lt;code class=&quot;language-text&quot;&gt;yahma/alpaca-cleaned&lt;/code&gt; dataset from Hugging Face. It&apos;s a cleaned version of Stanford&apos;s Alpaca dataset: 52,000 instruction-following examples generated by GPT-3. Each example has an instruction, an optional input, and an output.&lt;/p&gt;
+&lt;p&gt;A raw sample from the dataset looks like this:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;json&quot;&gt;&lt;pre class=&quot;language-json&quot;&gt;&lt;code class=&quot;language-json&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token property&quot;&gt;&quot;instruction&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;Give three tips for staying healthy.&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;token property&quot;&gt;&quot;input&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;token property&quot;&gt;&quot;output&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;1. Eat a balanced diet...\n2. Exercise regularly...\n3. Get enough sleep...&quot;&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;We format it into a single text string before training:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;### Instruction:
+Give three tips for staying healthy.
+
+### Response:
+1. Eat a balanced diet...
+2. Exercise regularly...
+3. Get enough sleep...&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;This structure teaches the model the exact pattern it needs to follow at inference time. When you later prompt it with &lt;code class=&quot;language-text&quot;&gt;### Instruction:&lt;/code&gt;, it knows a &lt;code class=&quot;language-text&quot;&gt;### Response:&lt;/code&gt; should come next. That&apos;s the whole trick behind instruction fine-tuning.&lt;/p&gt;
+&lt;h2&gt;The Training Script&lt;/h2&gt;
+&lt;p&gt;Here&apos;s the full &lt;code class=&quot;language-text&quot;&gt;train.py&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;python&quot;&gt;&lt;pre class=&quot;language-python&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; torch
+&lt;span class=&quot;token keyword&quot;&gt;from&lt;/span&gt; transformers &lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; AutoModelForCausalLM&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; AutoTokenizer
+&lt;span class=&quot;token keyword&quot;&gt;from&lt;/span&gt; peft &lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; LoraConfig&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; get_peft_model
+&lt;span class=&quot;token keyword&quot;&gt;from&lt;/span&gt; trl &lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; SFTTrainer&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; SFTConfig
+&lt;span class=&quot;token keyword&quot;&gt;from&lt;/span&gt; datasets &lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; load_dataset
+
+&lt;span class=&quot;token comment&quot;&gt;# Cap to 4 cores — leaves the rest of your Mac responsive during training&lt;/span&gt;
+torch&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;set_num_threads&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+MODEL_ID &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;TinyLlama/TinyLlama-1.1B-Chat-v1.0&quot;&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Loading tokenizer and model...&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+tokenizer &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; AutoTokenizer&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;from_pretrained&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;MODEL_ID&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+tokenizer&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;pad_token &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; tokenizer&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;eos_token
+model &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; AutoModelForCausalLM&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;from_pretrained&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;MODEL_ID&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+lora_config &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; LoraConfig&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;
+    r&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    lora_alpha&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;16&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    target_modules&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;q_proj&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;v_proj&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    lora_dropout&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;0.05&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    bias&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;none&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    task_type&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;CAUSAL_LM&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+model &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; get_peft_model&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;model&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; lora_config&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+model&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;print_trainable_parameters&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Loading dataset...&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+dataset &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; load_dataset&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;yahma/alpaca-cleaned&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; split&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;train[:500]&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;format_prompt&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;example&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;text&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string-interpolation&quot;&gt;&lt;span class=&quot;token string&quot;&gt;f&quot;### Instruction:\n&lt;/span&gt;&lt;span class=&quot;token interpolation&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;example&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;instruction&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;\n\n### Response:\n&lt;/span&gt;&lt;span class=&quot;token interpolation&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;example&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;output&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+dataset &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; dataset&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token builtin&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;format_prompt&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+config &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; SFTConfig&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;
+    output_dir&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;./tinyllama-lora&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    num_train_epochs&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    per_device_train_batch_size&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    gradient_accumulation_steps&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    fp16&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token boolean&quot;&gt;False&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    bf16&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token boolean&quot;&gt;False&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    use_cpu&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token boolean&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    dataloader_num_workers&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    logging_steps&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    save_steps&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;200&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    report_to&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;none&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    dataset_text_field&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;text&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    max_length&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;256&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+trainer &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; SFTTrainer&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;
+    model&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;model&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    args&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;config&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    train_dataset&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;dataset&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Starting training...&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+trainer&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;train&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+trainer&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;save_model&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;./tinyllama-lora&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+tokenizer&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;save_pretrained&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;./tinyllama-lora&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Done! Adapter saved to ./tinyllama-lora&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;A few things worth pointing out.&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;tokenizer.pad_token = tokenizer.eos_token&lt;/code&gt; is necessary because TinyLlama&apos;s tokenizer doesn&apos;t have a dedicated padding token. If you skip it, batching will fail with a cryptic error about pad token IDs.&lt;/p&gt;
+&lt;p&gt;The LoRA config targets &lt;code class=&quot;language-text&quot;&gt;q_proj&lt;/code&gt; and &lt;code class=&quot;language-text&quot;&gt;v_proj&lt;/code&gt;, the query and value projection matrices in the attention layers. These are where most of the model&apos;s instruction-following behavior comes from. If you want to train more of the model, you can also add &lt;code class=&quot;language-text&quot;&gt;k_proj&lt;/code&gt;, &lt;code class=&quot;language-text&quot;&gt;o_proj&lt;/code&gt;, and the MLP layers, but r=8 on just q and v gives solid results without burning too much CPU.&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;gradient_accumulation_steps=4&lt;/code&gt; with &lt;code class=&quot;language-text&quot;&gt;per_device_train_batch_size=1&lt;/code&gt; means the optimizer only updates weights every 4 steps, simulating an effective batch size of 4. On CPU where you can&apos;t fit large batches in memory, this is how you keep training stable without running out of RAM.&lt;/p&gt;
+&lt;p&gt;When I ran this, the terminal printed:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;trainable params: 1,126,400 || all params: 1,101,174,784 || trainable%: 0.1023&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Each step took about 14 to 20 seconds on CPU. 125 steps total. Budget about 40 minutes, make some coffee, come back.&lt;/p&gt;
+&lt;h2&gt;Merging the Adapter&lt;/h2&gt;
+&lt;p&gt;After training, you have a base model and a separate LoRA adapter directory. To deploy the model, you need to merge them into a single set of weights. That&apos;s what &lt;code class=&quot;language-text&quot;&gt;merge.py&lt;/code&gt; does:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;python&quot;&gt;&lt;pre class=&quot;language-python&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;from&lt;/span&gt; transformers &lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; AutoModelForCausalLM&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; AutoTokenizer
+&lt;span class=&quot;token keyword&quot;&gt;from&lt;/span&gt; peft &lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; PeftModel
+
+BASE_MODEL &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;TinyLlama/TinyLlama-1.1B-Chat-v1.0&quot;&lt;/span&gt;
+LORA_PATH &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;./tinyllama-lora&quot;&lt;/span&gt;
+OUTPUT_PATH &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;./tinyllama-merged&quot;&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Loading base model...&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+base &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; AutoModelForCausalLM&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;from_pretrained&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;BASE_MODEL&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Loading LoRA adapter...&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+model &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; PeftModel&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;from_pretrained&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;base&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; LORA_PATH&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Merging weights...&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+merged &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; model&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;merge_and_unload&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+merged&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;save_pretrained&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;OUTPUT_PATH&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+AutoTokenizer&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;from_pretrained&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;LORA_PATH&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;save_pretrained&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;OUTPUT_PATH&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string-interpolation&quot;&gt;&lt;span class=&quot;token string&quot;&gt;f&quot;Merged model saved to &lt;/span&gt;&lt;span class=&quot;token interpolation&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;OUTPUT_PATH&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;merge_and_unload()&lt;/code&gt; computes W + BA for each adapted layer and gives you back a clean model with no extra overhead. The result in &lt;code class=&quot;language-text&quot;&gt;./tinyllama-merged&lt;/code&gt; is a standard Hugging Face model folder that any tool can load directly.&lt;/p&gt;
+&lt;p&gt;Run it:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;python merge.py&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;What Is GGUF and Why Do We Need llama.cpp&lt;/h2&gt;
+&lt;p&gt;After merging, the model lives as a Hugging Face checkpoint. That format is great for training but not great for running locally on a CPU. It stores weights as full 32-bit floats, which is memory-heavy and slow at inference time.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;GGUF&lt;/strong&gt; (GPT-Generated Unified Format) is a file format designed specifically for running LLMs on regular hardware. It stores the model weights in a compressed, quantized format inside a single binary file. Instead of a folder with 10+ files, you get one &lt;code class=&quot;language-text&quot;&gt;.gguf&lt;/code&gt; file that&apos;s fast to load and efficient to run. Ollama, LM Studio, and other local inference tools all use GGUF under the hood.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;llama.cpp&lt;/strong&gt; is the open-source project that makes this conversion possible. It&apos;s a C++ implementation of LLM inference that can run models on CPU, Apple Silicon, and NVIDIA GPUs. It also ships a Python script that converts a Hugging Face model folder into a GGUF file with quantization applied.&lt;/p&gt;
+&lt;p&gt;Think of it as a model compressor. You take a 4GB training checkpoint, run it through llama.cpp&apos;s converter, and get a ~650MB GGUF file that runs fast on your laptop.&lt;/p&gt;
+&lt;p&gt;Here&apos;s how to do it:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; clone https://github.com/ggerganov/llama.cpp
+&lt;span class=&quot;token builtin class-name&quot;&gt;cd&lt;/span&gt; llama.cpp
+&lt;span class=&quot;token function&quot;&gt;make&lt;/span&gt;
+
+python convert_hf_to_gguf.py &lt;span class=&quot;token punctuation&quot;&gt;..&lt;/span&gt;/tinyllama-merged &lt;span class=&quot;token parameter variable&quot;&gt;--outfile&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;..&lt;/span&gt;/tinyllama-ft.gguf &lt;span class=&quot;token parameter variable&quot;&gt;--outtype&lt;/span&gt; q4_0&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;The &lt;code class=&quot;language-text&quot;&gt;q4_0&lt;/code&gt; flag means 4-bit quantization. Each weight value that was stored as a 32-bit float gets compressed to 4 bits. You lose a tiny bit of precision, but the model goes from 4GB to under 700MB and runs noticeably faster. For a fine-tuned model running on CPU, this trade-off is absolutely worth it.&lt;/p&gt;
+&lt;p&gt;Now create the Modelfile in your project root:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;FROM ./tinyllama-ft.gguf
+SYSTEM &quot;You are a helpful assistant fine-tuned on Alpaca instructions.&quot;
+PARAMETER temperature 0.7
+PARAMETER stop &quot;### Instruction:&quot;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Load it into Ollama and run it:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;ollama create tinyllama-ft &lt;span class=&quot;token parameter variable&quot;&gt;-f&lt;/span&gt; Modelfile
+ollama run tinyllama-ft&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Here&apos;s what an actual conversation looks like:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;&gt;&gt;&gt; Explain recursion like I&apos;m five.
+
+Recursion is when a function calls itself. Imagine you have a box of chocolates,
+and inside that box is another box of chocolates, and inside that one is another
+box... You keep opening boxes until you find an empty one. That empty box is your
+base case. Without it, you&apos;d open boxes forever.&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;That response is coming from a model you trained, running entirely on your laptop, with no API call, no cloud, no subscription.&lt;/p&gt;
+&lt;h2&gt;The Full Pipeline at a Glance&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;yahma/alpaca-cleaned (500 examples)
+         |
+         v
+   train.py  (LoRA fine-tuning on CPU, ~40 min)
+         |
+         v
+   ./tinyllama-lora  (adapter weights only, ~17MB)
+         |
+         v
+   merge.py  (merge adapter into base model)
+         |
+         v
+   ./tinyllama-merged  (full HuggingFace model, ~4GB)
+         |
+         v
+   llama.cpp convert  (GGUF quantization)
+         |
+         v
+   tinyllama-ft.gguf  (~650MB)
+         |
+         v
+   ollama create + run  (local inference)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;Running This on an Intel Mac: What to Expect&lt;/h2&gt;
+&lt;p&gt;This whole project was built and run on an Intel Mac, so I want to be straight with you about what that actually means. It works, but there are real limits you should know before you start.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Training is slow.&lt;/strong&gt; Each step took me 14 to 20 seconds. With 500 examples and 1 epoch, that&apos;s 125 steps, which means about 40 minutes of training. If you try to use more data or more epochs, that time goes up fast. On a GPU this would take under 2 minutes.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;You can&apos;t use fp16 or bf16.&lt;/strong&gt; These are faster number formats that GPU training relies on. Intel CPUs don&apos;t support them properly, so you have to run everything in full 32-bit precision. That makes training slower and uses more memory. The &lt;code class=&quot;language-text&quot;&gt;fp16=False, bf16=False&lt;/code&gt; flags in the config are not optional here.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;No MPS acceleration.&lt;/strong&gt; Apple Silicon Macs (M1, M2, M3) can use Metal Performance Shaders to speed up training. Intel Macs don&apos;t have that. You&apos;re on pure CPU.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;RAM gets tight.&lt;/strong&gt; Loading TinyLlama alone takes about 4GB of RAM. If you have an 8GB machine and other apps open, your Mac will start swapping memory to disk and training will slow down even more. I&apos;d recommend closing everything else before you start.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;You can&apos;t go much bigger than 1B parameters.&lt;/strong&gt; TinyLlama at 1.1B is close to the limit for what&apos;s practical on an Intel CPU. A 3B model will be painful. A 7B model will probably run out of memory entirely or take hours per epoch.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Inference in Ollama is slow too.&lt;/strong&gt; After deployment, expect around 3 to 8 tokens per second. It&apos;s usable, but don&apos;t expect instant responses like you get from a cloud API.&lt;/p&gt;
+&lt;p&gt;None of this stopped me from finishing the project and learning a lot from it. Just set the right expectations going in so you don&apos;t get discouraged halfway through.&lt;/p&gt;
+&lt;h2&gt;What I Actually Learned&lt;/h2&gt;
+&lt;p&gt;Fine-tuning a model feels intimidating from the outside. Once you do it, the mechanics are straightforward. The hard part is understanding which pieces are doing what, and why the numbers are what they are.&lt;/p&gt;
+&lt;p&gt;The 0.1% trainable parameters number is what I keep coming back to. LoRA is not a shortcut or a hack. It&apos;s a smart idea. You don&apos;t need to retrain everything, you just need to nudge what&apos;s already there in the right direction. Like giving a good chef a new recipe instead of sending them back to cooking school.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Building the Harness: How Real ML Systems Actually Run Models]]></title><description><![CDATA[You trained the model. Now what? This post explains model inference and harness engineering with real code and zero hand-waving.]]></description><link>https://murtazabagwala.xyz/posts/building-the-harness-how-real-ml-systems-run-models</link><guid isPermaLink="false">https://murtazabagwala.xyz/posts/building-the-harness-how-real-ml-systems-run-models</guid><pubDate>Sat, 11 Apr 2026 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Imagine you baked a really good cake. You spent hours getting the recipe right, tested it on friends, got great feedback. Now someone asks you to open a bakery.&lt;/p&gt;
 &lt;p&gt;Baking the cake is the easy part. The bakery is the hard part.&lt;/p&gt;
 &lt;p&gt;That is exactly what happens in machine learning. Training a model is the cake. Getting it to actually work for real users, reliably, every single time, is the bakery. This post is about building the bakery.&lt;/p&gt;
 &lt;h2&gt;Two things people confuse: training and inference&lt;/h2&gt;
