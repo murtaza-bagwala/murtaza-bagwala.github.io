@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0%" stop-color="#0d1117"/>
+      <stop offset="100%" stop-color="#161b22"/>
+    </linearGradient>
+    <marker id="arr-red" markerWidth="7" markerHeight="7" refX="4" refY="3.5" orient="auto">
+      <polygon points="0,0 7,3.5 0,7" fill="rgba(255,107,107,0.55)"/>
+    </marker>
+    <marker id="arr-green" markerWidth="7" markerHeight="7" refX="4" refY="3.5" orient="auto">
+      <polygon points="0,0 7,3.5 0,7" fill="rgba(81,207,102,0.65)"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="480" fill="url(#bg)"/>
+
+  <!-- Subtle vertical divider -->
+  <line x1="400" y1="20" x2="400" y2="460" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+
+  <!-- ══ LEFT: MULTI-AGENT ══ -->
+  <text x="200" y="38" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="11" fill="rgba(255,107,107,0.75)" letter-spacing="0.14em">MULTI-AGENT</text>
+
+  <!-- Orchestrator -->
+  <rect x="140" y="55" width="120" height="36" rx="5" fill="rgba(255,107,107,0.12)" stroke="rgba(255,107,107,0.55)" stroke-width="1.5"/>
+  <text x="200" y="78" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="10" fill="rgba(255,190,190,0.95)">Orchestrator</text>
+
+  <!-- Planner -->
+  <rect x="55" y="148" width="90" height="32" rx="4" fill="rgba(255,150,80,0.1)" stroke="rgba(255,150,80,0.45)" stroke-width="1"/>
+  <text x="100" y="169" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="10" fill="rgba(255,205,160,0.9)">Planner</text>
+
+  <!-- Executor -->
+  <rect x="255" y="148" width="90" height="32" rx="4" fill="rgba(255,150,80,0.1)" stroke="rgba(255,150,80,0.45)" stroke-width="1"/>
+  <text x="300" y="169" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="10" fill="rgba(255,205,160,0.9)">Executor</text>
+
+  <!-- Critic -->
+  <rect x="45" y="248" width="85" height="32" rx="4" fill="rgba(255,107,107,0.1)" stroke="rgba(255,107,107,0.38)" stroke-width="1"/>
+  <text x="87" y="269" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="10" fill="rgba(255,180,180,0.9)">Critic</text>
+
+  <!-- Summarizer -->
+  <rect x="248" y="248" width="104" height="32" rx="4" fill="rgba(255,107,107,0.1)" stroke="rgba(255,107,107,0.38)" stroke-width="1"/>
+  <text x="300" y="269" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="10" fill="rgba(255,180,180,0.9)">Summarizer</text>
+
+  <!-- Arrows -->
+  <line x1="178" y1="91" x2="118" y2="148" stroke="rgba(255,107,107,0.4)" stroke-width="1.5" marker-end="url(#arr-red)"/>
+  <line x1="222" y1="91" x2="280" y2="148" stroke="rgba(255,107,107,0.4)" stroke-width="1.5" marker-end="url(#arr-red)"/>
+  <line x1="96"  y1="180" x2="86"  y2="248" stroke="rgba(255,107,107,0.3)" stroke-width="1"   marker-end="url(#arr-red)"/>
+  <line x1="295" y1="180" x2="295" y2="248" stroke="rgba(255,107,107,0.3)" stroke-width="1"   marker-end="url(#arr-red)"/>
+  <!-- Feedback loop (dashed) -->
+  <path d="M 52 255 Q 15 155 140 78" stroke="rgba(255,107,107,0.22)" stroke-width="1.2" fill="none" stroke-dasharray="4,3" marker-end="url(#arr-red)"/>
+  <!-- Chaos cross-arrows -->
+  <line x1="145" y1="164" x2="248" y2="262" stroke="rgba(255,107,107,0.13)" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="255" y1="164" x2="125" y2="262" stroke="rgba(255,107,107,0.13)" stroke-width="1" stroke-dasharray="3,3"/>
+
+  <!-- Stats -->
+  <text x="200" y="318" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="rgba(255,107,107,0.5)">4+ LLM calls per task</text>
+  <text x="200" y="335" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="rgba(255,107,107,0.5)">~8x token cost</text>
+  <text x="200" y="352" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="rgba(255,107,107,0.5)">30s+ latency</text>
+  <text x="200" y="369" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="rgba(255,107,107,0.5)">N places to debug</text>
+
+  <!-- ══ RIGHT: SINGLE AGENT ══ -->
+  <text x="600" y="38" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="11" fill="rgba(81,207,102,0.75)" letter-spacing="0.14em">SINGLE AGENT</text>
+
+  <!-- Agent box -->
+  <rect x="525" y="105" width="150" height="50" rx="8" fill="rgba(81,207,102,0.12)" stroke="rgba(81,207,102,0.65)" stroke-width="2"/>
+  <text x="600" y="136" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="13" fill="rgba(180,255,200,0.95)" font-weight="500">Agent</text>
+
+  <!-- Tools box -->
+  <rect x="540" y="232" width="120" height="36" rx="5" fill="rgba(51,154,240,0.1)" stroke="rgba(51,154,240,0.45)" stroke-width="1.5"/>
+  <text x="600" y="255" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="10" fill="rgba(160,215,255,0.9)">Tools</text>
+
+  <!-- Down: Agent -> Tools -->
+  <line x1="600" y1="155" x2="600" y2="232" stroke="rgba(81,207,102,0.5)" stroke-width="1.5" marker-end="url(#arr-green)"/>
+
+  <!-- Right loop arc -->
+  <path d="M 675 128 Q 740 195 675 260" stroke="rgba(81,207,102,0.4)" stroke-width="1.5" fill="none" marker-end="url(#arr-green)"/>
+  <text x="752" y="202" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="8" fill="rgba(81,207,102,0.45)" transform="rotate(90,752,202)">loop</text>
+
+  <!-- Left return arc (dashed) -->
+  <path d="M 540 250 Q 480 195 540 140" stroke="rgba(81,207,102,0.25)" stroke-width="1.2" fill="none" stroke-dasharray="4,3" marker-end="url(#arr-green)"/>
+
+  <!-- Stats -->
+  <text x="600" y="318" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="rgba(81,207,102,0.5)">1 LLM in a loop</text>
+  <text x="600" y="335" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="rgba(81,207,102,0.5)">1x token cost</text>
+  <text x="600" y="352" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="rgba(81,207,102,0.5)">~3s latency</text>
+  <text x="600" y="369" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="rgba(81,207,102,0.5)">1 place to debug</text>
+
+  <!-- Bottom tagline -->
+  <line x1="60" y1="408" x2="740" y2="408" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+  <text x="400" y="438" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="rgba(255,255,255,0.3)" font-style="italic">Start simple. Add complexity only when forced to.</text>
+  <text x="400" y="460" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="rgba(255,255,255,0.18)" letter-spacing="0.1em">MURTAZA BAGWALA · MURTAZABAGWALA.XYZ</text>
+</svg>
