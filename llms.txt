@@ -17,6 +17,7 @@
 
 ## Articles
 
+- [You Can Outsource Your Thinking. You Can't Outsource Understanding.](https://murtazabagwala.xyz/posts/2026-05-01---outsource-thinking-not-understanding/) — 2026-05-01 · AI Philosophy · AI can think for you. But the moment you need to explain, decide, or truly know something, that work is still yours.
 - [The Multilingual Problem Nobody Talks About When Building AI Chatbots](https://murtazabagwala.xyz/posts/multilingual-chatbot-lexicon-langgraph/) — 2026-04-25 · AI Engineering · Building a chatbot with LangGraph that supports multiple languages is harder than it looks. Here is how we solved it without calling an LLM for every yes or no.
 - [You Don't Need a Multi-Agent System](https://murtazabagwala.xyz/posts/2026-04-22---you-dont-need-a-multi-agent-system/) — 2026-04-22 · AI Engineering · Multi-agent systems look impressive in demos. In production, a single well-designed agent usually gets the job done with far less pain.
 - [How I Fine-Tuned TinyLlama on My Laptop Using LoRA](https://murtazabagwala.xyz/posts/fine-tuning-tinyllama-on-my-laptop-using-lora/) — 2026-04-20 · AI Engineering · A complete walkthrough of fine-tuning a 1.1B parameter model on a Mac using LoRA, merging the adapter, and serving it locally with Ollama.
